@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tracker Pro - Dashboard</title>
+    <title>Tracker Pro - Dashboard & WI Plan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -17,13 +17,57 @@
 </head>
 <body class="font-sans antialiased text-slate-200">
 
+    <!-- PANTALLA DE LOGIN OVERLAY -->
+    <div id="login-screen" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-8 relative">
+            <div class="text-center mb-6">
+                <div class="bg-blue-600/10 text-blue-400 p-4 rounded-2xl w-16 h-16 mx-auto mb-3 border border-blue-500/20 flex items-center justify-center">
+                    <i class="fa-solid fa-layer-group text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-black text-white">Tracker Pro</h2>
+                <p class="text-xs text-slate-400 mt-1">Ingresa tus credenciales para acceder al sistema</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Usuario</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-3 top-3 text-xs text-slate-500"></i>
+                        <input type="text" id="login-username" required placeholder="Ej. Daniel" class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Contraseña</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3 top-3 text-xs text-slate-500"></i>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div id="login-error" class="hidden text-rose-400 text-xs font-semibold bg-rose-950/40 border border-rose-800/60 p-2.5 rounded-lg text-center">
+                    Credenciales incorrectas
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-lg text-xs transition shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-[11px] text-slate-600 border-t border-slate-800/80 pt-4">
+                Inventec Engineering Platform • Internal Direct Access
+            </div>
+        </div>
+    </div>
+
     <!-- Header Navigation Bar -->
     <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center flex-wrap gap-4">
             <div class="flex items-center gap-3">
-                <div class="bg-blue-600 p-2.5 rounded-xl text-white shadow-lg shadow-blue-500/20">
-                    <i class="fa-solid fa-layer-group text-xl"></i>
-                </div>
+                <button onclick="toggleFullScreenMenu()" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-white border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-bars text-lg text-blue-400"></i>
+                    <span class="text-xs font-bold hidden sm:inline">Menú / Módulos</span>
+                </button>
                 <div>
                     <h1 class="text-lg font-bold text-white leading-none">Tracker Pro</h1>
                     <span class="text-xs text-slate-400 font-medium">Turso Cloud Direct</span>
@@ -33,6 +77,9 @@
             <nav class="flex items-center gap-2 flex-wrap">
                 <button onclick="switchTab('activities')" id="nav-actividades" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-white border border-slate-700 hover:bg-slate-700 transition flex items-center gap-2">
                     <i class="fa-solid fa-list-check text-slate-400"></i> Actividades
+                </button>
+                <button onclick="switchTab('wi-plan')" id="nav-wi-plan" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white transition flex items-center gap-2 border border-transparent">
+                    <i class="fa-solid fa-file-signature text-amber-400"></i> WI Plan Master
                 </button>
                 <button onclick="switchTab('users')" id="nav-usuarios" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white transition flex items-center gap-2 border border-transparent">
                     <i class="fa-solid fa-users text-slate-400"></i> Usuarios
@@ -46,10 +93,67 @@
                             <option value="user" class="bg-slate-900">Usuario Standard</option>
                         </select>
                     </div>
+
+                    <!-- BOTÓN SALIR DEL SISTEMA / LOGOUT -->
+                    <button onclick="logout()" title="Cerrar Sesión" class="bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-800/80 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-right-from-bracket text-rose-400"></i>
+                        <span class="hidden sm:inline">Salir</span>
+                    </button>
                 </div>
             </nav>
         </div>
     </header>
+
+    <!-- MENU FULL SCREEN OVERLAY -->
+    <div id="fullscreen-menu" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md hidden z-50 flex-col justify-between p-6 sm:p-12 transition-all">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-6">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 p-3 rounded-2xl text-white">
+                    <i class="fa-solid fa-layer-group text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-white">Navegación General</h2>
+                    <p class="text-xs text-slate-400">Selecciona un módulo del sistema</p>
+                </div>
+            </div>
+            <button onclick="toggleFullScreenMenu()" class="text-slate-400 hover:text-white bg-slate-900 border border-slate-800 p-3 rounded-2xl transition">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto max-w-5xl mx-auto w-full">
+            <div onclick="switchTab('activities'); toggleFullScreenMenu();" class="bg-slate-900 hover:bg-slate-800/80 border border-slate-800 hover:border-blue-500/50 p-8 rounded-2xl cursor-pointer transition flex flex-col items-center text-center group shadow-xl">
+                <div class="p-5 bg-blue-600/10 text-blue-400 rounded-2xl mb-4 group-hover:scale-110 transition">
+                    <i class="fa-solid fa-list-check text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Gestión de Actividades</h3>
+                <p class="text-xs text-slate-400">Control de proyectos, visualización en Gantt, gráfica de carga y seguimiento.</p>
+            </div>
+
+            <div onclick="switchTab('wi-plan'); toggleFullScreenMenu();" class="bg-slate-900 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-8 rounded-2xl cursor-pointer transition flex flex-col items-center text-center group shadow-xl">
+                <div class="p-5 bg-amber-500/10 text-amber-400 rounded-2xl mb-4 group-hover:scale-110 transition">
+                    <i class="fa-solid fa-file-signature text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">WI Master Plan</h3>
+                <p class="text-xs text-slate-400">Work Instructions, matrices de avance por fases (P1, P2, P3) y Workload.</p>
+            </div>
+
+            <div onclick="switchTab('users'); toggleFullScreenMenu();" class="bg-slate-900 hover:bg-slate-800/80 border border-slate-800 hover:border-purple-500/50 p-8 rounded-2xl cursor-pointer transition flex flex-col items-center text-center group shadow-xl">
+                <div class="p-5 bg-purple-500/10 text-purple-400 rounded-2xl mb-4 group-hover:scale-110 transition">
+                    <i class="fa-solid fa-users text-4xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Directorio de Usuarios</h3>
+                <p class="text-xs text-slate-400">Administración de usuarios sincronizados con la base de datos Turso.</p>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs text-slate-600 border-t border-slate-900 pt-4 max-w-5xl mx-auto w-full">
+            <span>Tracker Pro System • Inventec Engineering Internal Platform</span>
+            <button onclick="toggleFullScreenMenu(); logout();" class="text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1">
+                <i class="fa-solid fa-right-from-bracket"></i> Salir del Sistema
+            </button>
+        </div>
+    </div>
 
     <main class="max-w-7xl mx-auto px-4 py-6">
 
@@ -176,6 +280,7 @@
                                 <th class="p-3.5">Fin</th>
                                 <th class="p-3.5">Avance</th>
                                 <th class="p-3.5">Estado</th>
+                                <th class="p-3.5 text-center">Adjuntos / Comentarios</th>
                                 <th class="p-3.5 text-right">Acciones</th>
                             </tr>
                         </thead>
@@ -194,6 +299,198 @@
                 </div>
                 <div id="gantt-chart-container" class="gantt-container bg-slate-950/50 p-4 rounded-xl border border-slate-800/80"></div>
             </section>
+
+        </div>
+
+        <!-- VISTA WI PLAN MASTER -->
+        <div id="view-wi-plan" class="hidden space-y-6">
+            
+            <!-- Encabezado de Proyecto e Información Principal -->
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-wrap gap-6 items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="bg-red-600/20 text-red-500 font-black px-4 py-2.5 rounded-xl border border-red-500/30 text-lg tracking-wider">
+                        INVENTEC
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white">WORK INSTRUCTION MASTER PLAN</h2>
+                        <p class="text-xs text-slate-400">Project: <span class="text-slate-200 font-bold">WI Improvement</span> | Program: <span class="text-slate-200 font-bold">Automotive Business</span></p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3 text-xs">
+                    <div class="bg-slate-950 border border-slate-800 px-3 py-2 rounded-lg">
+                        <span class="text-slate-500 block text-[10px] uppercase font-bold">Owners</span>
+                        <span class="text-slate-300 font-semibold">E. Simental, D. Martinez, E. Ceballos</span>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 px-3 py-2 rounded-lg">
+                        <span class="text-slate-500 block text-[10px] uppercase font-bold">Updated Date</span>
+                        <span class="text-amber-400 font-mono font-bold">2026-07-30</span>
+                    </div>
+                    <button onclick="openWiModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-plus"></i> Agregar WI
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard de Métricas WI y Fases -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <div class="lg:col-span-8 grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-center">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">TOTAL WI</span>
+                        <h4 id="wi-total-count" class="text-2xl font-black text-blue-400 mt-1">0</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-center">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">COMPLETED</span>
+                        <h4 id="wi-completed-count" class="text-2xl font-black text-emerald-400 mt-1">0</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-center">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">IN PROGRESS</span>
+                        <h4 id="wi-progress-count" class="text-2xl font-black text-amber-400 mt-1">0</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-center">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">PENDING</span>
+                        <h4 id="wi-pending-count" class="text-2xl font-black text-slate-300 mt-1">0</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-center">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">OVERDUE</span>
+                        <h4 id="wi-overdue-count" class="text-2xl font-black text-rose-500 mt-1">0</h4>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-around">
+                    <div>
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">OVERALL PROGRESS</span>
+                        <h3 id="wi-overall-percent" class="text-3xl font-black text-indigo-400 mt-1">0%</h3>
+                    </div>
+                    <div class="w-16 h-16 relative">
+                        <canvas id="wiOverallChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FASES DE PROGRESO -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl border-t-4 border-t-blue-500">
+                    <div class="flex justify-between text-xs font-bold mb-1">
+                        <span class="text-slate-300">PHASE 1 - DOCUMENT CREATION</span>
+                        <span class="text-blue-400">33.3%</span>
+                    </div>
+                    <h3 id="phase1-percent" class="text-2xl font-black text-white">0%</h3>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl border-t-4 border-t-emerald-500">
+                    <div class="flex justify-between text-xs font-bold mb-1">
+                        <span class="text-slate-300">PHASE 2 - TECHNICAL REVIEW</span>
+                        <span class="text-emerald-400">33.3%</span>
+                    </div>
+                    <h3 id="phase2-percent" class="text-2xl font-black text-white">0%</h3>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl border-t-4 border-t-purple-500">
+                    <div class="flex justify-between text-xs font-bold mb-1">
+                        <span class="text-slate-300">PHASE 3 - RELEASE</span>
+                        <span class="text-purple-400">33.3%</span>
+                    </div>
+                    <h3 id="phase3-percent" class="text-2xl font-black text-white">0%</h3>
+                </div>
+            </div>
+
+            <!-- TABLA PRINCIPAL WI Y GANTT SEMANAL POR PERIODO Y FASE -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/80">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-table-list text-amber-400"></i> Matriz de Planificación y Gantt por Fase / Periodo
+                    </h3>
+                    <div class="flex items-center gap-4 text-[11px]">
+                        <span class="flex items-center gap-1 text-blue-400 font-bold"><span class="w-3 h-3 bg-blue-600 rounded-sm inline-block"></span> Phase 1</span>
+                        <span class="flex items-center gap-1 text-emerald-400 font-bold"><span class="w-3 h-3 bg-emerald-600 rounded-sm inline-block"></span> Phase 2</span>
+                        <span class="flex items-center gap-1 text-purple-400 font-bold"><span class="w-3 h-3 bg-purple-600 rounded-sm inline-block"></span> Phase 3</span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse font-sans">
+                        <thead>
+                            <tr class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider border-b border-slate-800">
+                                <th class="p-2.5 border-r border-slate-800">WI NO.</th>
+                                <th class="p-2.5 border-r border-slate-800 min-w-[150px]">WORK INSTRUCTION</th>
+                                <th class="p-2.5 border-r border-slate-800">OWNER</th>
+                                <th class="p-2.5 border-r border-slate-800 text-center">TURN</th>
+                                <th class="p-2.5 border-r border-slate-800 text-center">PRIORITY</th>
+                                <th class="p-2.5 border-r border-slate-800 text-center">FASE ACTIVA</th>
+                                <th class="p-2.5 border-r border-slate-800 text-center">P1</th>
+                                <th class="p-2.5 border-r border-slate-800 text-center">P2</th>
+                                <th class="p-2.5 border-r border-slate-800 text-center">P3</th>
+                                <th class="p-2.5 border-r border-slate-800 text-center">STATUS</th>
+                                <th class="p-2.5 border-r border-slate-800 text-center">% COMPLETE</th>
+                                <th class="p-1 border-r border-slate-800 text-center bg-slate-900/50" colspan="4">JULY (W1 - W4)</th>
+                                <th class="p-1 border-r border-slate-800 text-center bg-slate-900/50" colspan="4">AUGUST (W5 - W8)</th>
+                                <th class="p-2.5 text-right">ACCIONES</th>
+                            </tr>
+                            <tr class="bg-slate-950/80 text-[9px] text-slate-500 font-mono border-b border-slate-800 text-center">
+                                <th colspan="11" class="border-r border-slate-800"></th>
+                                <th class="p-1 border-r border-slate-800">W1</th>
+                                <th class="p-1 border-r border-slate-800">W2</th>
+                                <th class="p-1 border-r border-slate-800">W3</th>
+                                <th class="p-1 border-r border-slate-800">W4</th>
+                                <th class="p-1 border-r border-slate-800">W5</th>
+                                <th class="p-1 border-r border-slate-800">W6</th>
+                                <th class="p-1 border-r border-slate-800">W7</th>
+                                <th class="p-1 border-r border-slate-800">W8</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="wi-table-body" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Leyendas de Fases y Resumen de Carga del Equipo -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-5 bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
+                    <h4 class="text-xs font-bold text-white uppercase border-b border-slate-800 pb-2">Descripción de Fases</h4>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-start gap-2">
+                            <span class="bg-blue-600/30 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded text-[10px] font-bold">Phase 1</span>
+                            <p class="text-slate-300">Creación de WI (Caminar el proceso, verificar puntos críticos, análisis de secuencia).</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">Phase 2</span>
+                            <p class="text-slate-300">Revisión Técnica y validación en línea de producción.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="bg-purple-600/30 text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-bold">Phase 3</span>
+                            <p class="text-slate-300">Adición a características críticas en WI, PFMEA y generación de plan de reacción.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                    <div class="p-3 border-b border-slate-800 bg-slate-950/60 flex justify-between items-center">
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Team Workload Summary (100% Editable)</h4>
+                        <button onclick="openWorkloadModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded text-[11px] font-bold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> Agregar Integrante
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] border-b border-slate-800">
+                                    <th class="p-2.5">OWNER</th>
+                                    <th class="p-2.5 text-center">TOTAL WI</th>
+                                    <th class="p-2.5 text-center">COMPLETED</th>
+                                    <th class="p-2.5 text-center">IN PROGRESS</th>
+                                    <th class="p-2.5 text-center">PENDING</th>
+                                    <th class="p-2.5 text-center">OVERDUE</th>
+                                    <th class="p-2.5 text-center">% COMPLETE</th>
+                                    <th class="p-2.5 text-right">ACCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wi-workload-body" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -233,7 +530,7 @@
 
     </main>
 
-    <!-- Modal Tareas -->
+    <!-- Modal Tareas General -->
     <div id="task-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-lg p-6 relative">
             <h3 id="modal-title" class="text-base font-bold text-white mb-4">Nueva Actividad</h3>
@@ -294,6 +591,150 @@
         </div>
     </div>
 
+    <!-- MODAL REGISTRO DE WI PLAN -->
+    <div id="wi-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-xl p-6 relative">
+            <h3 id="wi-modal-title" class="text-base font-bold text-white mb-4">Anexar Work Instruction</h3>
+            <form id="wi-form" onsubmit="saveWiItem(event)" class="space-y-4">
+                <input type="hidden" id="wi-id">
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">WI NO.</label>
+                        <input type="text" id="wi-code" placeholder="Ej. WI-007" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Instruction Title</label>
+                        <input type="text" id="wi-title" placeholder="Ej. AOI INSPECTION" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Owner</label>
+                        <input type="text" id="wi-owner" placeholder="Ej. Daniel Martinez" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Turn</label>
+                        <select id="wi-turn" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Priority</label>
+                        <select id="wi-priority" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-3 border-t border-slate-800 pt-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-400 mb-1">Fase Activa (Gantt)</label>
+                        <select id="wi-active-phase" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-2 text-xs text-white focus:outline-none focus:border-amber-500 font-bold">
+                            <option value="P1">Phase 1 (Azul)</option>
+                            <option value="P2">Phase 2 (Verde)</option>
+                            <option value="P3">Phase 3 (Púrpura)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">P1 Status</label>
+                        <select id="wi-p1" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                            <option value="Completed">Completed</option>
+                            <option value="Pending" selected>Pending</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">P2 Status</label>
+                        <select id="wi-p2" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                            <option value="Completed">Completed</option>
+                            <option value="Pending" selected>Pending</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">P3 Status</label>
+                        <select id="wi-p3" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                            <option value="Completed">Completed</option>
+                            <option value="Pending" selected>Pending</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 border-t border-slate-800 pt-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Status</label>
+                        <select id="wi-status" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Overdue">Overdue</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Semana Inicio Gantt</label>
+                        <input type="number" id="wi-week-start" min="1" max="8" value="1" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Semana Fin Gantt</label>
+                        <input type="number" id="wi-week-end" min="1" max="8" value="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 border-t border-slate-800 pt-4">
+                    <button type="button" onclick="closeWiModal()" class="px-4 py-2 border border-slate-800 rounded-lg text-xs font-semibold text-slate-400 hover:bg-slate-800 hover:text-white transition">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold transition">Guardar WI</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR CARGA DE TRABAJO -->
+    <div id="workload-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+            <h3 id="workload-modal-title" class="text-base font-bold text-white mb-4">Editar Carga del Integrante</h3>
+            <form onsubmit="saveWorkloadItem(event)" class="space-y-4">
+                <input type="hidden" id="workload-owner-key">
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nombre Integrante (Owner)</label>
+                    <input type="text" id="workload-owner-name" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-emerald-400 mb-1">Completed</label>
+                        <input type="number" id="workload-completed" min="0" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-amber-400 mb-1">In Progress</label>
+                        <input type="number" id="workload-progress" min="0" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Pending</label>
+                        <input type="number" id="workload-pending" min="0" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-rose-400 mb-1">Overdue</label>
+                        <input type="number" id="workload-overdue" min="0" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 border-t border-slate-800 pt-4">
+                    <button type="button" onclick="closeWorkloadModal()" class="px-4 py-2 border border-slate-800 rounded-lg text-xs font-semibold text-slate-400 hover:bg-slate-800 hover:text-white transition">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold transition">Guardar Carga</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal Usuario -->
     <div id="user-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 relative">
@@ -315,7 +756,55 @@
         </div>
     </div>
 
-    <!-- Conexión Corregida con Turso API v2 -->
+    <!-- MODAL DE DETALLES: ADJUNTOS Y COMENTARIOS -->
+    <div id="details-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl p-6 relative flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+                <div>
+                    <h3 id="details-title" class="text-base font-bold text-white">Detalles de Actividad</h3>
+                    <p id="details-subtitle" class="text-xs text-slate-400">Archivos adjuntos y notas</p>
+                </div>
+                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="flex border-b border-slate-800 mb-4 gap-4">
+                <button id="tab-btn-comments" onclick="switchDetailsTab('comments')" class="pb-2 text-xs font-bold border-b-2 border-blue-500 text-blue-400 flex items-center gap-2">
+                    <i class="fa-solid fa-comments"></i> Comentarios (<span id="comments-count">0</span>)
+                </button>
+                <button id="tab-btn-files" onclick="switchDetailsTab('files')" class="pb-2 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-paperclip"></i> Archivos Adjuntos (<span id="files-count">0</span>)
+                </button>
+            </div>
+
+            <input type="hidden" id="current-details-activity-id">
+
+            <div id="tab-content-comments" class="flex-1 flex flex-col overflow-hidden space-y-4">
+                <div id="comments-list" class="flex-1 overflow-y-auto space-y-3 pr-2 min-h-[180px]"></div>
+
+                <div class="flex gap-2 pt-2 border-t border-slate-800">
+                    <input type="text" id="new-comment-input" placeholder="Escribe un comentario..." class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    <button onclick="addComment()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar
+                    </button>
+                </div>
+            </div>
+
+            <div id="tab-content-files" class="flex-1 flex flex-col overflow-hidden space-y-4 hidden">
+                <div id="files-list" class="flex-1 overflow-y-auto space-y-2 pr-2 min-h-[180px]"></div>
+
+                <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between gap-3 pt-2">
+                    <input type="file" id="file-uploader" class="text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
+                    <button onclick="uploadFile()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shrink-0">
+                        <i class="fa-solid fa-upload"></i> Subir Archivo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Lógica General e Integración -->
     <script>
         const TURSO_URL = "https://turnob-ingdanielmtz.aws-us-west-2.turso.io";
         const TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3ODUzNjA3NTcsImlkIjoiMDE5Zjk0ZDAtZWIwMS03YzllLTg0YTItYTZlNDAxZjI3NzJiIiwia2lkIjoiaUpnZlN5MUJMMjQteGltcmRtdUwzUWlZR1hzeTF1WVJDelB0OXdVY1lOOCIsInJpZCI6ImY0OTA1YWMyLWIyZTYtNGY3Ny1iYzBjLTY4ZTI2YmYyZGYwMiJ9.eKt1PLmYKDb6N45PhI0Q3kO52thXCWs7psoRAUHnlolxwjEwBvi--6wkYetgN7o3sBlLgV6vncZOKFGaKcqGDQ";
@@ -325,20 +814,73 @@
         let globalUsers = [];
         let statusChartInstance = null;
         let barChartInstance = null;
+        let wiOverallChartInstance = null;
+
+        let wiPlanList = [
+            { id: 1, code: 'WI-001', title: 'LOADER', owner: 'Eduardo Simental', turn: 'B', priority: 'High', activePhase: 'P1', p1: 'Completed', p2: 'Pending', p3: 'Pending', status: 'In Progress', weekStart: 1, weekEnd: 3 },
+            { id: 2, code: 'WI-002', title: 'INPUT', owner: 'Eduardo Simental', turn: 'B', priority: 'High', activePhase: 'P1', p1: 'Pending', p2: 'Pending', p3: 'Pending', status: 'Pending', weekStart: 5, weekEnd: 7 },
+            { id: 3, code: 'WI-003', title: 'MARCADO LASER', owner: 'Eduardo Simental', turn: 'B', priority: 'High', activePhase: 'P2', p1: 'Completed', p2: 'Completed', p3: 'Pending', status: 'In Progress', weekStart: 3, weekEnd: 6 },
+            { id: 4, code: 'WI-004', title: 'SCREEN PRINTER', owner: 'Jennifer Sanchez', turn: 'A', priority: 'High', activePhase: 'P1', p1: 'Pending', p2: 'Pending', p3: 'Pending', status: 'Pending', weekStart: 2, weekEnd: 4 },
+            { id: 5, code: 'WI-005', title: 'SPI', owner: 'Alejandro Guerrero', turn: 'D', priority: 'High', activePhase: 'P3', p1: 'Completed', p2: 'Completed', p3: 'Completed', status: 'Completed', weekStart: 4, weekEnd: 7 },
+            { id: 6, code: 'WI-006', title: 'PICK AND PLACE', owner: 'Manuel Acosta', turn: 'C', priority: 'High', activePhase: 'P1', p1: 'Completed', p2: 'Pending', p3: 'Pending', status: 'In Progress', weekStart: 2, weekEnd: 5 }
+        ];
+
+        let customWorkloadMap = {
+            "Daniel Martinez": { completed: 2, progress: 1, pending: 1, overdue: 0 },
+            "Ervey Ceballos": { completed: 1, progress: 2, pending: 0, overdue: 0 },
+            "Eduardo Simental": { completed: 1, progress: 2, pending: 1, overdue: 0 },
+            "Jennifer Sanchez": { completed: 0, progress: 0, pending: 1, overdue: 0 },
+            "Sofia Rodriguez": { completed: 1, progress: 1, pending: 0, overdue: 0 },
+            "Ulises Saldana": { completed: 0, progress: 1, pending: 1, overdue: 0 },
+            "Manuel Acosta": { completed: 0, progress: 1, pending: 0, overdue: 0 },
+            "Alejandro Guerrero": { completed: 1, progress: 0, pending: 0, overdue: 0 }
+        };
+
+        /* LÓGICA DE CONTROL DE SESIÓN (LOGIN / LOGOUT) */
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('login-username').value.trim();
+            const pass = document.getElementById('login-password').value.trim();
+            const errDiv = document.getElementById('login-error');
+
+            if (user && pass) {
+                // Si entra como Daniel o Admin activa automáticamente el Rol Admin
+                const roleSelector = document.getElementById('role-selector');
+                if (user.toLowerCase().includes('daniel') || user.toLowerCase().includes('admin')) {
+                    if (roleSelector) roleSelector.value = 'admin';
+                    toggleRole('admin');
+                } else {
+                    if (roleSelector) roleSelector.value = 'user';
+                    toggleRole('user');
+                }
+
+                errDiv.classList.add('hidden');
+                document.getElementById('login-screen').classList.add('hidden');
+            } else {
+                errDiv.classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            // Limpia campos de login y muestra de nuevo la pantalla de acceso
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function toggleFullScreenMenu() {
+            const menu = document.getElementById('fullscreen-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        }
 
         async function tursoQuery(statements) {
-            const requests = [
-                { type: "execute", stmt: { sql: "BEGIN" } }
-            ];
-
+            const requests = [{ type: "execute", stmt: { sql: "BEGIN" } }];
             statements.forEach(s => {
-                if (typeof s === 'string') {
-                    requests.push({ type: "execute", stmt: { sql: s } });
-                } else if (typeof s === 'object') {
-                    requests.push({ type: "execute", stmt: s });
-                }
+                if (typeof s === 'string') requests.push({ type: "execute", stmt: { sql: s } });
+                else if (typeof s === 'object') requests.push({ type: "execute", stmt: s });
             });
-
             requests.push({ type: "execute", stmt: { sql: "COMMIT" } });
 
             const response = await fetch(`${TURSO_URL}/v2/pipeline`, {
@@ -359,10 +901,15 @@
             return data.results.slice(1, -1);
         }
 
+        window.onload = function() {
+            initDB();
+        };
+
         async function initDB() {
             try {
                 await loadUsers();
                 await loadTasks();
+                renderWiPlan();
             } catch (err) {
                 console.error("Error conectando con Turso:", err);
             }
@@ -374,13 +921,17 @@
             const adminNotice = document.getElementById('admin-notice');
 
             if (role === 'admin') {
-                btnAddUser.disabled = false;
-                btnAddUser.className = "bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs font-semibold transition cursor-pointer";
-                adminNotice.classList.add('hidden');
+                if (btnAddUser) {
+                    btnAddUser.disabled = false;
+                    btnAddUser.className = "bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs font-semibold transition cursor-pointer";
+                }
+                if (adminNotice) adminNotice.classList.add('hidden');
             } else {
-                btnAddUser.disabled = true;
-                btnAddUser.className = "bg-slate-800 text-slate-500 px-4 py-2 rounded-lg text-xs font-semibold cursor-not-allowed border border-slate-700";
-                adminNotice.classList.remove('hidden');
+                if (btnAddUser) {
+                    btnAddUser.disabled = true;
+                    btnAddUser.className = "bg-slate-800 text-slate-500 px-4 py-2 rounded-lg text-xs font-semibold cursor-not-allowed border border-slate-700";
+                }
+                if (adminNotice) adminNotice.classList.remove('hidden');
             }
             renderUsersTable();
         }
@@ -399,13 +950,13 @@
                 const filterSelect = document.getElementById('filter-user');
                 const taskSelect = document.getElementById('task-assigned');
 
-                filterSelect.innerHTML = '<option value="">Todos los Responsables</option>';
-                taskSelect.innerHTML = '<option value="">Selecciona Responsable...</option>';
+                if(filterSelect) filterSelect.innerHTML = '<option value="">Todos los Responsables</option>';
+                if(taskSelect) taskSelect.innerHTML = '<option value="">Selecciona Responsable...</option>';
 
                 globalUsers.forEach(u => {
                     if (u.username) {
-                        filterSelect.innerHTML += `<option value="${u.username}">${u.username}</option>`;
-                        taskSelect.innerHTML += `<option value="${u.username}">${u.username}</option>`;
+                        if(filterSelect) filterSelect.innerHTML += `<option value="${u.username}">${u.username}</option>`;
+                        if(taskSelect) taskSelect.innerHTML += `<option value="${u.username}">${u.username}</option>`;
                     }
                 });
 
@@ -417,6 +968,7 @@
 
         function renderUsersTable() {
             const tbody = document.getElementById('users-table-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
 
             if (globalUsers.length === 0) {
@@ -506,10 +1058,10 @@
         }
 
         function filterTasks() {
-            const search = document.getElementById('search-input').value.toLowerCase();
-            const userFilter = document.getElementById('filter-user').value;
-            const statusFilter = document.getElementById('filter-status').value;
-            const priorityFilter = document.getElementById('filter-priority').value;
+            const search = document.getElementById('search-input')?.value.toLowerCase() || '';
+            const userFilter = document.getElementById('filter-user')?.value || '';
+            const statusFilter = document.getElementById('filter-status')?.value || '';
+            const priorityFilter = document.getElementById('filter-priority')?.value || '';
 
             const filtered = globalTasks.filter(t => {
                 const matchesSearch = t.title.toLowerCase().includes(search);
@@ -526,22 +1078,19 @@
 
         function getPriorityBadgeClass(priority) {
             switch(priority) {
-                case 'Alta':
-                    return 'bg-rose-950/80 border-rose-700 text-rose-300';
-                case 'Media':
-                    return 'bg-amber-950/80 border-amber-700 text-amber-300';
-                case 'Baja':
-                default:
-                    return 'bg-slate-800 border-slate-700 text-slate-400';
+                case 'Alta': case 'High': return 'bg-rose-950/80 border-rose-700 text-rose-300';
+                case 'Media': case 'Medium': return 'bg-amber-950/80 border-amber-700 text-amber-300';
+                case 'Baja': case 'Low': default: return 'bg-slate-800 border-slate-700 text-slate-400';
             }
         }
 
         function renderTasksTable(tasksList) {
             const tbody = document.getElementById('tasks-table-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
 
             if (tasksList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center p-6 text-slate-500">No se encontraron tareas registradas.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center p-6 text-slate-500">No se encontraron tareas registradas.</td></tr>`;
                 return;
             }
 
@@ -571,6 +1120,11 @@
                                 ${t.status}
                             </span>
                         </td>
+                        <td class="p-3.5 text-center">
+                            <button onclick="openDetailsModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1 rounded-lg transition text-[11px] flex items-center gap-1.5 mx-auto">
+                                <i class="fa-solid fa-folder-open text-amber-400"></i> Ver / Anexar
+                            </button>
+                        </td>
                         <td class="p-3.5 text-right space-x-2">
                             <button onclick="editTask(${t.id})" class="text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-pen"></i></button>
                             <button onclick="deleteTask(${t.id})" class="text-rose-400 hover:text-rose-300 transition"><i class="fa-solid fa-trash"></i></button>
@@ -582,19 +1136,15 @@
 
         function getStatusBadgeClass(status) {
             switch(status) {
-                case 'Completado':
-                case 'Finalizada': 
-                    return 'bg-emerald-950/60 border-emerald-800/80 text-emerald-400';
-                case 'En Proceso': 
-                    return 'bg-amber-950/60 border-amber-800/80 text-amber-400';
-                case 'Pendiente':
-                default: 
-                    return 'bg-rose-950/60 border-rose-800/80 text-rose-400';
+                case 'Completado': case 'Completed': case 'Finalizada': return 'bg-emerald-950/60 border-emerald-800/80 text-emerald-400';
+                case 'En Proceso': case 'In Progress': return 'bg-amber-950/60 border-amber-800/80 text-amber-400';
+                case 'Pendiente': case 'Pending': default: return 'bg-rose-950/60 border-rose-800/80 text-rose-400';
             }
         }
 
         function renderGantt(tasksList) {
             const container = document.getElementById('gantt-chart-container');
+            if(!container) return;
             if (!tasksList || tasksList.length === 0) {
                 container.innerHTML = `<p class="text-slate-500 text-xs text-center py-6">Sin actividades filtradas para el Gantt.</p>`;
                 return;
@@ -734,24 +1284,28 @@
 
             const uniqueUsers = new Set(tasksList.map(t => t.assigned_to).filter(Boolean)).size;
 
-            document.getElementById('metric-total').innerText = total;
-            document.getElementById('metric-due-soon').innerText = dueSoon;
-            document.getElementById('metric-completed').innerText = completed;
-            document.getElementById('metric-active-users').innerText = uniqueUsers;
+            if(document.getElementById('metric-total')) document.getElementById('metric-total').innerText = total;
+            if(document.getElementById('metric-due-soon')) document.getElementById('metric-due-soon').innerText = dueSoon;
+            if(document.getElementById('metric-completed')) document.getElementById('metric-completed').innerText = completed;
+            if(document.getElementById('metric-active-users')) document.getElementById('metric-active-users').innerText = uniqueUsers;
 
             const alertBanner = document.getElementById('overdue-alert');
-            if (dueSoon > 0) {
-                alertBanner.classList.remove('hidden');
-                document.getElementById('alert-title').innerText = `¡Atención! Hay ${dueSoon} tarea(s) próxima(s) a vencer o vencida(s)`;
-            } else {
-                alertBanner.classList.add('hidden');
+            if (alertBanner) {
+                if (dueSoon > 0) {
+                    alertBanner.classList.remove('hidden');
+                    document.getElementById('alert-title').innerText = `¡Atención! Hay ${dueSoon} tarea(s) próxima(s) a vencer o vencida(s)`;
+                } else {
+                    alertBanner.classList.add('hidden');
+                }
             }
 
             renderCharts(tasksList);
         }
 
         function renderCharts(tasksList) {
-            const ctxDoughnut = document.getElementById('statusChart').getContext('2d');
+            const chartCanvas = document.getElementById('statusChart');
+            if(!chartCanvas) return;
+            const ctxDoughnut = chartCanvas.getContext('2d');
             const pending = tasksList.filter(t => t.status === 'Pendiente').length;
             const inProgress = tasksList.filter(t => t.status === 'En Proceso').length;
             const completed = tasksList.filter(t => t.status === 'Completado' || t.status === 'Finalizada').length;
@@ -825,22 +1379,348 @@
             });
         }
 
+        /* LÓGICA RENDER WI PLAN MASTER */
+        function renderWiPlan() {
+            const tbody = document.getElementById('wi-table-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            let total = wiPlanList.length;
+            let completedCount = 0;
+            let inProgressCount = 0;
+            let pendingCount = 0;
+            let overdueCount = 0;
+
+            let p1Completed = 0;
+            let p2Completed = 0;
+            let p3Completed = 0;
+
+            wiPlanList.forEach(item => {
+                let phasesDone = 0;
+                if (item.p1 === 'Completed') { phasesDone++; p1Completed++; }
+                if (item.p2 === 'Completed') { phasesDone++; p2Completed++; }
+                if (item.p3 === 'Completed') { phasesDone++; p3Completed++; }
+
+                let percent = Math.round((phasesDone / 3) * 100);
+
+                if (item.status === 'Completed') completedCount++;
+                else if (item.status === 'In Progress') inProgressCount++;
+                else if (item.status === 'Overdue') overdueCount++;
+                else pendingCount++;
+
+                let phaseColorClass = 'bg-blue-600/80 text-white border-blue-400/50 shadow-sm';
+                let phaseLabel = item.activePhase || 'P1';
+
+                if (phaseLabel === 'P3') {
+                    phaseColorClass = 'bg-purple-600/80 text-white border-purple-400/50 shadow-sm';
+                } else if (phaseLabel === 'P2') {
+                    phaseColorClass = 'bg-emerald-600/80 text-white border-emerald-400/50 shadow-sm';
+                } else {
+                    phaseColorClass = 'bg-blue-600/80 text-white border-blue-400/50 shadow-sm';
+                }
+
+                let weekCells = '';
+                const startW = item.weekStart || 1;
+                const endW = item.weekEnd || startW;
+
+                for (let w = 1; w <= 8; w++) {
+                    if (w >= startW && w <= endW) {
+                        let isStartCell = (w === startW);
+                        let isEndCell = (w === endW);
+                        let roundedCorners = '';
+
+                        if (isStartCell && isEndCell) roundedCorners = 'rounded-md';
+                        else if (isStartCell) roundedCorners = 'rounded-l-md';
+                        else if (isEndCell) roundedCorners = 'rounded-r-md';
+
+                        weekCells += `
+                            <td class="p-0.5 border-r border-slate-800 text-center">
+                                <div class="${phaseColorClass} ${roundedCorners} h-6 flex items-center justify-center font-bold text-[9px] font-mono border">
+                                    ${isStartCell ? phaseLabel : '•'}
+                                </div>
+                            </td>`;
+                    } else {
+                        weekCells += `<td class="p-1 border-r border-slate-800 text-center text-slate-800">•</td>`;
+                    }
+                }
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-800/40 border-b border-slate-800/60 text-slate-200">
+                        <td class="p-2.5 border-r border-slate-800 font-mono font-bold text-blue-400">${item.code}</td>
+                        <td class="p-2.5 border-r border-slate-800 font-bold">${item.title}</td>
+                        <td class="p-2.5 border-r border-slate-800 text-slate-300">${item.owner}</td>
+                        <td class="p-2.5 border-r border-slate-800 text-center font-bold text-amber-400">${item.turn}</td>
+                        <td class="p-2.5 border-r border-slate-800 text-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${getPriorityBadgeClass(item.priority)}">
+                                ${item.priority}
+                            </span>
+                        </td>
+                        <td class="p-2.5 border-r border-slate-800 text-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold border ${getPhaseBadgeClass(phaseLabel)}">
+                                ${phaseLabel}
+                            </span>
+                        </td>
+                        <td class="p-2.5 border-r border-slate-800 text-center">
+                            <span class="text-[10px] font-bold ${item.p1 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p1}</span>
+                        </td>
+                        <td class="p-2.5 border-r border-slate-800 text-center">
+                            <span class="text-[10px] font-bold ${item.p2 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p2}</span>
+                        </td>
+                        <td class="p-2.5 border-r border-slate-800 text-center">
+                            <span class="text-[10px] font-bold ${item.p3 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p3}</span>
+                        </td>
+                        <td class="p-2.5 border-r border-slate-800 text-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${getStatusBadgeClass(item.status)}">
+                                ${item.status}
+                            </span>
+                        </td>
+                        <td class="p-2.5 border-r border-slate-800 text-center font-mono font-bold text-indigo-300">${percent}%</td>
+                        ${weekCells}
+                        <td class="p-2.5 text-right space-x-2">
+                            <button onclick="editWiItem(${item.id})" class="text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteWiItem(${item.id})" class="text-rose-400 hover:text-rose-300 transition"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('wi-total-count').innerText = total;
+            document.getElementById('wi-completed-count').innerText = completedCount;
+            document.getElementById('wi-progress-count').innerText = inProgressCount;
+            document.getElementById('wi-pending-count').innerText = pendingCount;
+            document.getElementById('wi-overdue-count').innerText = overdueCount;
+
+            let p1Pct = total ? Math.round((p1Completed / total) * 100) : 0;
+            let p2Pct = total ? Math.round((p2Completed / total) * 100) : 0;
+            let p3Pct = total ? Math.round((p3Completed / total) * 100) : 0;
+
+            document.getElementById('phase1-percent').innerText = `${p1Pct}%`;
+            document.getElementById('phase2-percent').innerText = `${p2Pct}%`;
+            document.getElementById('phase3-percent').innerText = `${p3Pct}%`;
+
+            let overallPct = Math.round((p1Pct + p2Pct + p3Pct) / 3);
+            document.getElementById('wi-overall-percent').innerText = `${overallPct}%`;
+
+            renderWiOverallChart(overallPct);
+            renderTeamWorkload();
+        }
+
+        function getPhaseBadgeClass(phase) {
+            switch(phase) {
+                case 'P3': return 'bg-purple-950/80 border-purple-700 text-purple-300';
+                case 'P2': return 'bg-emerald-950/80 border-emerald-700 text-emerald-300';
+                case 'P1': default: return 'bg-blue-950/80 border-blue-700 text-blue-300';
+            }
+        }
+
+        function renderWiOverallChart(percent) {
+            const ctx = document.getElementById('wiOverallChart').getContext('2d');
+            if (wiOverallChartInstance) wiOverallChartInstance.destroy();
+
+            wiOverallChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [percent, Math.max(0, 100 - percent)],
+                        backgroundColor: ['#6366f1', '#1e293b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } }
+                }
+            });
+        }
+
+        function renderTeamWorkload() {
+            const tbody = document.getElementById('wi-workload-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            Object.keys(customWorkloadMap).forEach(owner => {
+                const data = customWorkloadMap[owner];
+                const total = (data.completed || 0) + (data.progress || 0) + (data.pending || 0) + (data.overdue || 0);
+                const pct = total ? Math.round(((data.completed || 0) / total) * 100) : 0;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-800/30 border-b border-slate-800/60">
+                        <td class="p-2.5 font-bold text-slate-200"><i class="fa-solid fa-circle text-[6px] text-blue-400 mr-2"></i>${owner}</td>
+                        <td class="p-2.5 text-center font-mono font-bold text-white">${total}</td>
+                        <td class="p-2.5 text-center font-mono text-emerald-400 font-bold">${data.completed || 0}</td>
+                        <td class="p-2.5 text-center font-mono text-amber-400 font-bold">${data.progress || 0}</td>
+                        <td class="p-2.5 text-center font-mono text-slate-400 font-bold">${data.pending || 0}</td>
+                        <td class="p-2.5 text-center font-mono text-rose-400 font-bold">${data.overdue || 0}</td>
+                        <td class="p-2.5 text-center font-mono font-bold text-indigo-400">${pct}%</td>
+                        <td class="p-2.5 text-right space-x-2">
+                            <button onclick="editWorkloadItem('${owner}')" class="text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteWorkloadItem('${owner}')" class="text-rose-400 hover:text-rose-300 transition"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function openWorkloadModal(ownerKey = '') {
+            document.getElementById('workload-owner-key').value = ownerKey;
+            
+            if (ownerKey && customWorkloadMap[ownerKey]) {
+                document.getElementById('workload-modal-title').innerText = 'Editar Carga del Integrante';
+                document.getElementById('workload-owner-name').value = ownerKey;
+                document.getElementById('workload-completed').value = customWorkloadMap[ownerKey].completed || 0;
+                document.getElementById('workload-progress').value = customWorkloadMap[ownerKey].progress || 0;
+                document.getElementById('workload-pending').value = customWorkloadMap[ownerKey].pending || 0;
+                document.getElementById('workload-overdue').value = customWorkloadMap[ownerKey].overdue || 0;
+            } else {
+                document.getElementById('workload-modal-title').innerText = 'Agregar Integrante a Carga';
+                document.getElementById('workload-owner-name').value = '';
+                document.getElementById('workload-completed').value = 0;
+                document.getElementById('workload-progress').value = 0;
+                document.getElementById('workload-pending').value = 0;
+                document.getElementById('workload-overdue').value = 0;
+            }
+
+            document.getElementById('workload-modal').classList.remove('hidden');
+            document.getElementById('workload-modal').classList.add('flex');
+        }
+
+        function closeWorkloadModal() {
+            document.getElementById('workload-modal').classList.add('hidden');
+            document.getElementById('workload-modal').classList.remove('flex');
+        }
+
+        function saveWorkloadItem(e) {
+            e.preventDefault();
+            const originalKey = document.getElementById('workload-owner-key').value;
+            const newName = document.getElementById('workload-owner-name').value.trim();
+            const completed = parseInt(document.getElementById('workload-completed').value) || 0;
+            const progress = parseInt(document.getElementById('workload-progress').value) || 0;
+            const pending = parseInt(document.getElementById('workload-pending').value) || 0;
+            const overdue = parseInt(document.getElementById('workload-overdue').value) || 0;
+
+            if (!newName) return;
+
+            if (originalKey && originalKey !== newName) {
+                delete customWorkloadMap[originalKey];
+            }
+
+            customWorkloadMap[newName] = { completed, progress, pending, overdue };
+            closeWorkloadModal();
+            renderTeamWorkload();
+        }
+
+        function editWorkloadItem(owner) {
+            openWorkloadModal(owner);
+        }
+
+        function deleteWorkloadItem(owner) {
+            if(!confirm(`¿Desea eliminar a ${owner} del resumen de carga?`)) return;
+            delete customWorkloadMap[owner];
+            renderTeamWorkload();
+        }
+
+        function openWiModal() {
+            document.getElementById('wi-form').reset();
+            document.getElementById('wi-id').value = '';
+            document.getElementById('wi-modal-title').innerText = 'Anexar Work Instruction';
+            document.getElementById('wi-modal').classList.remove('hidden');
+            document.getElementById('wi-modal').classList.add('flex');
+        }
+
+        function closeWiModal() {
+            document.getElementById('wi-modal').classList.add('hidden');
+            document.getElementById('wi-modal').classList.remove('flex');
+        }
+
+        function saveWiItem(e) {
+            e.preventDefault();
+            const id = document.getElementById('wi-id').value;
+            const code = document.getElementById('wi-code').value.trim();
+            const title = document.getElementById('wi-title').value.trim();
+            const owner = document.getElementById('wi-owner').value.trim();
+            const turn = document.getElementById('wi-turn').value;
+            const priority = document.getElementById('wi-priority').value;
+            const activePhase = document.getElementById('wi-active-phase').value;
+            const p1 = document.getElementById('wi-p1').value;
+            const p2 = document.getElementById('wi-p2').value;
+            const p3 = document.getElementById('wi-p3').value;
+            const status = document.getElementById('wi-status').value;
+            const weekStart = parseInt(document.getElementById('wi-week-start').value) || 1;
+            const weekEnd = parseInt(document.getElementById('wi-week-end').value) || weekStart;
+
+            if (id) {
+                const index = wiPlanList.findIndex(item => item.id == id);
+                if (index !== -1) {
+                    wiPlanList[index] = { id: Number(id), code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd };
+                }
+            } else {
+                const newId = wiPlanList.length ? Math.max(...wiPlanList.map(i => i.id)) + 1 : 1;
+                wiPlanList.push({ id: newId, code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd });
+            }
+
+            closeWiModal();
+            renderWiPlan();
+        }
+
+        function editWiItem(id) {
+            const item = wiPlanList.find(i => i.id === id);
+            if (!item) return;
+
+            openWiModal();
+            document.getElementById('wi-modal-title').innerText = 'Editar Work Instruction';
+            document.getElementById('wi-id').value = item.id;
+            document.getElementById('wi-code').value = item.code;
+            document.getElementById('wi-title').value = item.title;
+            document.getElementById('wi-owner').value = item.owner;
+            document.getElementById('wi-turn').value = item.turn;
+            document.getElementById('wi-priority').value = item.priority;
+            document.getElementById('wi-active-phase').value = item.activePhase || 'P1';
+            document.getElementById('wi-p1').value = item.p1;
+            document.getElementById('wi-p2').value = item.p2;
+            document.getElementById('wi-p3').value = item.p3;
+            document.getElementById('wi-status').value = item.status;
+            document.getElementById('wi-week-start').value = item.weekStart || 1;
+            document.getElementById('wi-week-end').value = item.weekEnd || 1;
+        }
+
+        function deleteWiItem(id) {
+            if(!confirm("¿Desea eliminar esta instrucción de trabajo?")) return;
+            wiPlanList = wiPlanList.filter(item => item.id !== id);
+            renderWiPlan();
+        }
+
         function switchTab(tab) {
             const btnAct = document.getElementById('nav-actividades');
+            const btnWi = document.getElementById('nav-wi-plan');
             const btnUsers = document.getElementById('nav-usuarios');
+
             const viewAct = document.getElementById('view-activities');
+            const viewWi = document.getElementById('view-wi-plan');
             const viewUsers = document.getElementById('view-users');
 
+            const activeClass = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-white border border-slate-700 hover:bg-slate-700 transition flex items-center gap-2';
+            const inactiveClass = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white transition flex items-center gap-2 border border-transparent';
+
+            btnAct.className = inactiveClass;
+            if(btnWi) btnWi.className = inactiveClass;
+            btnUsers.className = inactiveClass;
+
+            viewAct.classList.add('hidden');
+            if(viewWi) viewWi.classList.add('hidden');
+            viewUsers.classList.add('hidden');
+
             if (tab === 'activities') {
-                btnAct.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-white border border-slate-700 hover:bg-slate-700 transition flex items-center gap-2';
-                btnUsers.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white transition flex items-center gap-2 border border-transparent';
+                btnAct.className = activeClass;
                 viewAct.classList.remove('hidden');
-                viewUsers.classList.add('hidden');
+            } else if (tab === 'wi-plan') {
+                if(btnWi) btnWi.className = activeClass;
+                if(viewWi) viewWi.classList.remove('hidden');
+                renderWiPlan();
             } else {
-                btnUsers.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-white border border-slate-700 hover:bg-slate-700 transition flex items-center gap-2';
-                btnAct.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white transition flex items-center gap-2 border border-transparent';
+                btnUsers.className = activeClass;
                 viewUsers.classList.remove('hidden');
-                viewAct.classList.add('hidden');
             }
         }
 
@@ -884,7 +1764,191 @@
             document.getElementById('task-priority').value = task.priority || "Media";
         }
 
-        window.onload = initDB;
+        /* DETALLES DE ACTIVIDADES, COMENTARIOS Y ADJUNTOS */
+        async function openDetailsModal(activityId) {
+            const task = globalTasks.find(t => t.id === activityId);
+            if (!task) return;
+
+            document.getElementById('current-details-activity-id').value = activityId;
+            document.getElementById('details-title').innerText = `#${task.id} - ${task.title}`;
+            document.getElementById('details-subtitle').innerText = `Asignado a: ${task.assigned_to}`;
+
+            document.getElementById('details-modal').classList.remove('hidden');
+            document.getElementById('details-modal').classList.add('flex');
+
+            switchDetailsTab('comments');
+            await loadActivityComments(activityId);
+            await loadActivityFiles(activityId);
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('details-modal').classList.add('hidden');
+            document.getElementById('details-modal').classList.remove('flex');
+        }
+
+        function switchDetailsTab(tab) {
+            const btnComments = document.getElementById('tab-btn-comments');
+            const btnFiles = document.getElementById('tab-btn-files');
+            const contentComments = document.getElementById('tab-content-comments');
+            const contentFiles = document.getElementById('tab-content-files');
+
+            if (tab === 'comments') {
+                btnComments.className = 'pb-2 text-xs font-bold border-b-2 border-blue-500 text-blue-400 flex items-center gap-2';
+                btnFiles.className = 'pb-2 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2';
+                contentComments.classList.remove('hidden');
+                contentFiles.classList.add('hidden');
+            } else {
+                btnFiles.className = 'pb-2 text-xs font-bold border-b-2 border-blue-500 text-blue-400 flex items-center gap-2';
+                btnComments.className = 'pb-2 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2';
+                contentFiles.classList.remove('hidden');
+                contentComments.classList.add('hidden');
+            }
+        }
+
+        async function loadActivityComments(activityId) {
+            const container = document.getElementById('comments-list');
+            container.innerHTML = `<p class="text-xs text-slate-500">Cargando comentarios...</p>`;
+
+            try {
+                const res = await tursoQuery([{
+                    sql: "SELECT id, author, text, created_at FROM comments WHERE activity_id = ? ORDER BY id ASC",
+                    args: [{ type: "text", value: String(activityId) }]
+                }]);
+
+                const rows = res[0]?.response?.result?.rows || [];
+                document.getElementById('comments-count').innerText = rows.length;
+
+                if (rows.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-slate-500 italic py-4 text-center">No hay comentarios aun.</p>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+                rows.forEach(r => {
+                    const author = r[1]?.value || 'Daniel';
+                    const text = r[2]?.value || '';
+                    const date = r[3]?.value || '';
+
+                    container.innerHTML += `
+                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-indigo-400"><i class="fa-solid fa-user-circle"></i> ${author}</span>
+                                <span class="text-[10px] text-slate-500 font-mono">${date}</span>
+                            </div>
+                            <p class="text-xs text-slate-300 whitespace-pre-wrap">${text}</p>
+                        </div>
+                    `;
+                });
+                container.scrollTop = container.scrollHeight;
+            } catch (err) {
+                container.innerHTML = `<p class="text-xs text-rose-400">Error al cargar comentarios.</p>`;
+            }
+        }
+
+        async function addComment() {
+            const activityId = document.getElementById('current-details-activity-id').value;
+            const input = document.getElementById('new-comment-input');
+            const text = input.value.trim();
+
+            if (!text || !activityId) return;
+
+            const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
+
+            try {
+                await tursoQuery([{
+                    sql: "INSERT INTO comments (activity_id, author, text, created_at) VALUES (?, ?, ?, ?)",
+                    args: [
+                        { type: "text", value: String(activityId) },
+                        { type: "text", value: "Daniel" },
+                        { type: "text", value: String(text) },
+                        { type: "text", value: String(now) }
+                    ]
+                }]);
+
+                input.value = '';
+                await loadActivityComments(activityId);
+            } catch (err) {
+                alert("Error al publicar comentario: " + err.message);
+            }
+        }
+
+        async function loadActivityFiles(activityId) {
+            const container = document.getElementById('files-list');
+            container.innerHTML = `<p class="text-xs text-slate-500">Cargando archivos...</p>`;
+
+            try {
+                const res = await tursoQuery([{
+                    sql: "SELECT id, file_name, file_data FROM attachments WHERE activity_id = ? ORDER BY id DESC",
+                    args: [{ type: "text", value: String(activityId) }]
+                }]);
+
+                const rows = res[0]?.response?.result?.rows || [];
+                document.getElementById('files-count').innerText = rows.length;
+
+                if (rows.length === 0) {
+                    container.innerHTML = `<p class="text-xs text-slate-500 italic py-4 text-center">No hay archivos adjuntos.</p>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+                rows.forEach(r => {
+                    const id = r[0]?.value;
+                    const name = r[1]?.value || 'Archivo sin nombre';
+                    const base64Data = r[2]?.value || '';
+
+                    container.innerHTML += `
+                        <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 truncate">
+                                <i class="fa-solid fa-file-lines text-blue-400 text-sm"></i>
+                                <span class="text-xs font-semibold text-slate-200 truncate">${name}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a href="${base64Data}" download="${name}" class="text-xs font-bold text-blue-400 hover:text-blue-300 bg-slate-900 border border-slate-800 px-2 py-1 rounded-md transition flex items-center gap-1">
+                                    <i class="fa-solid fa-download"></i> Descargar
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                container.innerHTML = `<p class="text-xs text-rose-400">Error al cargar archivos.</p>`;
+            }
+        }
+
+        async function uploadFile() {
+            const activityId = document.getElementById('current-details-activity-id').value;
+            const fileInput = document.getElementById('file-uploader');
+
+            if (!fileInput.files.length || !activityId) {
+                alert("Por favor selecciona un archivo.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function (e) {
+                const base64Data = e.target.result;
+
+                try {
+                    await tursoQuery([{
+                        sql: "INSERT INTO attachments (activity_id, file_name, file_data) VALUES (?, ?, ?)",
+                        args: [
+                            { type: "text", value: String(activityId) },
+                            { type: "text", value: String(file.name) },
+                            { type: "text", value: String(base64Data) }
+                        ]
+                    }]);
+
+                    fileInput.value = '';
+                    await loadActivityFiles(activityId);
+                } catch (err) {
+                    alert("Error al subir archivo: " + err.message);
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
     </script>
 </body>
 </html>
