@@ -94,7 +94,6 @@
                         </select>
                     </div>
 
-                    <!-- BOTÓN SALIR DEL SISTEMA / LOGOUT -->
                     <button onclick="logout()" title="Cerrar Sesión" class="bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-800/80 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
                         <i class="fa-solid fa-right-from-bracket text-rose-400"></i>
                         <span class="hidden sm:inline">Salir</span>
@@ -305,7 +304,6 @@
         <!-- VISTA WI PLAN MASTER -->
         <div id="view-wi-plan" class="hidden space-y-6">
             
-            <!-- Encabezado de Proyecto e Información Principal -->
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl flex flex-wrap gap-6 items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="bg-red-600/20 text-red-500 font-black px-4 py-2.5 rounded-xl border border-red-500/30 text-lg tracking-wider">
@@ -332,7 +330,7 @@
                 </div>
             </div>
 
-            <!-- Dashboard de Métricas WI y Fases -->
+            <!-- Dashboard de Métricas WI -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 <div class="lg:col-span-8 grid grid-cols-2 sm:grid-cols-5 gap-3">
                     <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-center">
@@ -395,7 +393,7 @@
                 </div>
             </div>
 
-            <!-- TABLA PRINCIPAL WI Y GANTT SEMANAL POR PERIODO Y FASE -->
+            <!-- TABLA PRINCIPAL WI -->
             <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
                 <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/80">
                     <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
@@ -445,7 +443,7 @@
                 </div>
             </div>
 
-            <!-- Leyendas de Fases y Resumen de Carga del Equipo -->
+            <!-- Resumen de Carga -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <div class="lg:col-span-5 bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
                     <h4 class="text-xs font-bold text-white uppercase border-b border-slate-800 pb-2">Descripción de Fases</h4>
@@ -467,7 +465,7 @@
 
                 <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
                     <div class="p-3 border-b border-slate-800 bg-slate-950/60 flex justify-between items-center">
-                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Team Workload Summary (100% Editable)</h4>
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Team Workload Summary (100% Sincronizado a Turso)</h4>
                         <button onclick="openWorkloadModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded text-[11px] font-bold transition flex items-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> Agregar Integrante
                         </button>
@@ -530,7 +528,7 @@
 
     </main>
 
-    <!-- Modal Tareas General -->
+    <!-- Modales -->
     <div id="task-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-lg p-6 relative">
             <h3 id="modal-title" class="text-base font-bold text-white mb-4">Nueva Actividad</h3>
@@ -756,55 +754,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE DETALLES: ADJUNTOS Y COMENTARIOS -->
-    <div id="details-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl p-6 relative flex flex-col max-h-[90vh]">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
-                <div>
-                    <h3 id="details-title" class="text-base font-bold text-white">Detalles de Actividad</h3>
-                    <p id="details-subtitle" class="text-xs text-slate-400">Archivos adjuntos y notas</p>
-                </div>
-                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-white transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div class="flex border-b border-slate-800 mb-4 gap-4">
-                <button id="tab-btn-comments" onclick="switchDetailsTab('comments')" class="pb-2 text-xs font-bold border-b-2 border-blue-500 text-blue-400 flex items-center gap-2">
-                    <i class="fa-solid fa-comments"></i> Comentarios (<span id="comments-count">0</span>)
-                </button>
-                <button id="tab-btn-files" onclick="switchDetailsTab('files')" class="pb-2 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
-                    <i class="fa-solid fa-paperclip"></i> Archivos Adjuntos (<span id="files-count">0</span>)
-                </button>
-            </div>
-
-            <input type="hidden" id="current-details-activity-id">
-
-            <div id="tab-content-comments" class="flex-1 flex flex-col overflow-hidden space-y-4">
-                <div id="comments-list" class="flex-1 overflow-y-auto space-y-3 pr-2 min-h-[180px]"></div>
-
-                <div class="flex gap-2 pt-2 border-t border-slate-800">
-                    <input type="text" id="new-comment-input" placeholder="Escribe un comentario..." class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
-                    <button onclick="addComment()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-paper-plane"></i> Enviar
-                    </button>
-                </div>
-            </div>
-
-            <div id="tab-content-files" class="flex-1 flex flex-col overflow-hidden space-y-4 hidden">
-                <div id="files-list" class="flex-1 overflow-y-auto space-y-2 pr-2 min-h-[180px]"></div>
-
-                <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between gap-3 pt-2">
-                    <input type="file" id="file-uploader" class="text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
-                    <button onclick="uploadFile()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shrink-0">
-                        <i class="fa-solid fa-upload"></i> Subir Archivo
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Script de Lógica General e Integración -->
+    <!-- Script de Lógica General con Persistencia Directa en Turso -->
     <script>
     const TURSO_URL = "https://turnob-ingdanielmtz.aws-us-west-2.turso.io";
     const TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3ODUzNjA3NTcsImlkIjoiMDE5Zjk0ZDAtZWIwMS03YzllLTg0YTItYTZlNDAxZjI3NzJiIiwia2lkIjoiaUpnZlN5MUJMMjQteGltcmRtdUwzUWlZR1hzeTF1WVJDelB0OXdVY1lOOCIsInJpZCI6ImY0OTA1YWMyLWIyZTYtNGY3Ny1iYzBjLTY4ZTI2YmYyZGYwMiJ9.eKt1PLmYKDb6N45PhI0Q3kO52thXCWs7psoRAUHnlolxwjEwBvi--6wkYetgN7o3sBlLgV6vncZOKFGaKcqGDQ";
@@ -812,100 +762,12 @@
     let currentRole = 'admin';
     let globalTasks = [];
     let globalUsers = [];
+    let wiPlanList = [];
+    let customWorkloadMap = {};
+
     let statusChartInstance = null;
     let barChartInstance = null;
     let wiOverallChartInstance = null;
-
-    // Datos por defecto si no existen en localStorage
-    const defaultWiPlanList = [
-        { id: 1, code: 'WI-001', title: 'LOADER', owner: 'Eduardo Simental', turn: 'B', priority: 'High', activePhase: 'P1', p1: 'Completed', p2: 'Pending', p3: 'Pending', status: 'In Progress', weekStart: 1, weekEnd: 3 },
-        { id: 2, code: 'WI-002', title: 'INPUT', owner: 'Eduardo Simental', turn: 'B', priority: 'High', activePhase: 'P1', p1: 'Pending', p2: 'Pending', p3: 'Pending', status: 'Pending', weekStart: 5, weekEnd: 7 },
-        { id: 3, code: 'WI-003', title: 'MARCADO LASER', owner: 'Eduardo Simental', turn: 'B', priority: 'High', activePhase: 'P2', p1: 'Completed', p2: 'Completed', p3: 'Pending', status: 'In Progress', weekStart: 3, weekEnd: 6 },
-        { id: 4, code: 'WI-004', title: 'SCREEN PRINTER', owner: 'Jennifer Sanchez', turn: 'A', priority: 'High', activePhase: 'P1', p1: 'Pending', p2: 'Pending', p3: 'Pending', status: 'Pending', weekStart: 2, weekEnd: 4 },
-        { id: 5, code: 'WI-005', title: 'SPI', owner: 'Alejandro Guerrero', turn: 'D', priority: 'High', activePhase: 'P3', p1: 'Completed', p2: 'Completed', p3: 'Completed', status: 'Completed', weekStart: 4, weekEnd: 7 },
-        { id: 6, code: 'WI-006', title: 'PICK AND PLACE', owner: 'Manuel Acosta', turn: 'C', priority: 'High', activePhase: 'P1', p1: 'Completed', p2: 'Pending', p3: 'Pending', status: 'In Progress', weekStart: 2, weekEnd: 5 }
-    ];
-
-    const defaultWorkloadMap = {
-        "Daniel Martinez": { completed: 2, progress: 1, pending: 1, overdue: 0 },
-        "Ervey Ceballos": { completed: 1, progress: 2, pending: 0, overdue: 0 },
-        "Eduardo Simental": { completed: 1, progress: 2, pending: 1, overdue: 0 },
-        "Jennifer Sanchez": { completed: 0, progress: 0, pending: 1, overdue: 0 },
-        "Sofia Rodriguez": { completed: 1, progress: 1, pending: 0, overdue: 0 },
-        "Ulises Saldana": { completed: 0, progress: 1, pending: 1, overdue: 0 },
-        "Manuel Acosta": { completed: 0, progress: 1, pending: 0, overdue: 0 },
-        "Alejandro Guerrero": { completed: 1, progress: 0, pending: 0, overdue: 0 }
-    };
-
-    // Cargar datos guardados en LocalStorage o tomar por defecto
-    let wiPlanList = JSON.parse(localStorage.getItem('tracker_wi_plan_list')) || defaultWiPlanList;
-    let customWorkloadMap = JSON.parse(localStorage.getItem('tracker_workload_map')) || defaultWorkloadMap;
-
-    function saveWiPlanToStorage() {
-        localStorage.setItem('tracker_wi_plan_list', JSON.stringify(wiPlanList));
-    }
-
-    function saveWorkloadToStorage() {
-        localStorage.setItem('tracker_workload_map', JSON.stringify(customWorkloadMap));
-    }
-
-    /* CONTROL DE SESIÓN PERSISTENTE */
-    function checkSavedSession() {
-        const savedSession = JSON.parse(localStorage.getItem('tracker_session'));
-        if (savedSession && savedSession.isLoggedIn) {
-            const roleSelector = document.getElementById('role-selector');
-            if (roleSelector) roleSelector.value = savedSession.role;
-            toggleRole(savedSession.role);
-            document.getElementById('login-screen').classList.add('hidden');
-        }
-    }
-
-    function handleLogin(e) {
-        e.preventDefault();
-        const user = document.getElementById('login-username').value.trim();
-        const pass = document.getElementById('login-password').value.trim();
-        const errDiv = document.getElementById('login-error');
-
-        if (user && pass) {
-            let role = 'user';
-            const roleSelector = document.getElementById('role-selector');
-            
-            if (user.toLowerCase().includes('daniel') || user.toLowerCase().includes('admin')) {
-                role = 'admin';
-            }
-
-            if (roleSelector) roleSelector.value = role;
-            toggleRole(role);
-
-            // Guardar sesión localmente
-            localStorage.setItem('tracker_session', JSON.stringify({
-                isLoggedIn: true,
-                username: user,
-                role: role
-            }));
-
-            errDiv.classList.add('hidden');
-            document.getElementById('login-screen').classList.add('hidden');
-        } else {
-            errDiv.classList.remove('hidden');
-        }
-    }
-
-    function logout() {
-        // Eliminar sesión guardada
-        localStorage.removeItem('tracker_session');
-        
-        document.getElementById('login-username').value = '';
-        document.getElementById('login-password').value = '';
-        document.getElementById('login-error').classList.add('hidden');
-        document.getElementById('login-screen').classList.remove('hidden');
-    }
-
-    function toggleFullScreenMenu() {
-        const menu = document.getElementById('fullscreen-menu');
-        menu.classList.toggle('hidden');
-        menu.classList.toggle('flex');
-    }
 
     async function tursoQuery(statements) {
         const requests = [{ type: "execute", stmt: { sql: "BEGIN" } }];
@@ -940,12 +802,451 @@
 
     async function initDB() {
         try {
+            await tursoQuery([
+                `CREATE TABLE IF NOT EXISTS wi_plan (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    code TEXT,
+                    title TEXT,
+                    owner TEXT,
+                    turn TEXT,
+                    priority TEXT,
+                    activePhase TEXT,
+                    p1 TEXT,
+                    p2 TEXT,
+                    p3 TEXT,
+                    status TEXT,
+                    weekStart INTEGER,
+                    weekEnd INTEGER
+                )`,
+                `CREATE TABLE IF NOT EXISTS team_workload (
+                    owner TEXT PRIMARY KEY,
+                    completed INTEGER DEFAULT 0,
+                    progress INTEGER DEFAULT 0,
+                    pending INTEGER DEFAULT 0,
+                    overdue INTEGER DEFAULT 0
+                )`
+            ]);
+
             await loadUsers();
             await loadTasks();
-            renderWiPlan();
+            await loadWiPlan();
+            await loadWorkload();
         } catch (err) {
-            console.error("Error conectando con Turso:", err);
+            console.error("Error inicializando tablas en Turso:", err);
         }
+    }
+
+    /* CARGA Y PERSISTENCIA DE WI PLAN DESDE TURSO */
+    async function loadWiPlan() {
+        try {
+            const res = await tursoQuery(["SELECT id, code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd FROM wi_plan ORDER BY id ASC"]);
+            const rows = res[0]?.response?.result?.rows || [];
+
+            if (rows.length === 0) {
+                // Insertar datos reales iniciales de producción SMT en Turso si la tabla está vacía
+                const seedQueries = [
+                    { sql: "INSERT INTO wi_plan (code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd) VALUES ('WI-001', 'LOADER & UNLOADER SMT', 'Eduardo Simental', 'B', 'High', 'P1', 'Completed', 'Pending', 'Pending', 'In Progress', 1, 3)", args: [] },
+                    { sql: "INSERT INTO wi_plan (code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd) VALUES ('WI-002', 'SCREEN PRINTER DEK', 'Jennifer Sanchez', 'A', 'High', 'P1', 'Pending', 'Pending', 'Pending', 'Pending', 2, 4)", args: [] },
+                    { sql: "INSERT INTO wi_plan (code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd) VALUES ('WI-003', 'MARCADO LASER CO2', 'Eduardo Simental', 'B', 'High', 'P2', 'Completed', 'Completed', 'Pending', 'In Progress', 3, 6)", args: [] },
+                    { sql: "INSERT INTO wi_plan (code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd) VALUES ('WI-004', 'SPI KOH YOUNG 3D', 'Ervey Ceballos', 'A', 'Medium', 'P1', 'Pending', 'Pending', 'Pending', 'Pending', 5, 7)", args: [] },
+                    { sql: "INSERT INTO wi_plan (code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd) VALUES ('WI-005', 'PICK & PLACE NPM-W2', 'Manuel Acosta', 'C', 'High', 'P1', 'Completed', 'Pending', 'Pending', 'In Progress', 2, 5)", args: [] },
+                    { sql: "INSERT INTO wi_plan (code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd) VALUES ('WI-006', 'AOI KOH YOUNG 3D', 'Alejandro Guerrero', 'D', 'High', 'P3', 'Completed', 'Completed', 'Completed', 'Completed', 4, 7)", args: [] }
+                ];
+                await tursoQuery(seedQueries);
+                return loadWiPlan();
+            }
+
+            wiPlanList = rows.map(r => ({
+                id: Number(r[0].value),
+                code: r[1]?.value || '',
+                title: r[2]?.value || '',
+                owner: r[3]?.value || '',
+                turn: r[4]?.value || 'A',
+                priority: r[5]?.value || 'Medium',
+                activePhase: r[6]?.value || 'P1',
+                p1: r[7]?.value || 'Pending',
+                p2: r[8]?.value || 'Pending',
+                p3: r[9]?.value || 'Pending',
+                status: r[10]?.value || 'Pending',
+                weekStart: Number(r[11]?.value || 1),
+                weekEnd: Number(r[12]?.value || 1)
+            }));
+
+            renderWiPlan();
+        } catch(e) {
+            console.error("Error al cargar WI Plan desde Turso:", e);
+        }
+    }
+
+    async function saveWiItem(e) {
+        e.preventDefault();
+        const id = document.getElementById('wi-id').value;
+        const code = document.getElementById('wi-code').value.trim();
+        const title = document.getElementById('wi-title').value.trim();
+        const owner = document.getElementById('wi-owner').value.trim();
+        const turn = document.getElementById('wi-turn').value;
+        const priority = document.getElementById('wi-priority').value;
+        const activePhase = document.getElementById('wi-active-phase').value;
+        const p1 = document.getElementById('wi-p1').value;
+        const p2 = document.getElementById('wi-p2').value;
+        const p3 = document.getElementById('wi-p3').value;
+        const status = document.getElementById('wi-status').value;
+        const weekStart = String(document.getElementById('wi-week-start').value || "1");
+        const weekEnd = String(document.getElementById('wi-week-end').value || weekStart);
+
+        try {
+            if (id) {
+                await tursoQuery([{
+                    sql: "UPDATE wi_plan SET code = ?, title = ?, owner = ?, turn = ?, priority = ?, activePhase = ?, p1 = ?, p2 = ?, p3 = ?, status = ?, weekStart = ?, weekEnd = ? WHERE id = ?",
+                    args: [
+                        { type: "text", value: code },
+                        { type: "text", value: title },
+                        { type: "text", value: owner },
+                        { type: "text", value: turn },
+                        { type: "text", value: priority },
+                        { type: "text", value: activePhase },
+                        { type: "text", value: p1 },
+                        { type: "text", value: p2 },
+                        { type: "text", value: p3 },
+                        { type: "text", value: status },
+                        { type: "text", value: weekStart },
+                        { type: "text", value: weekEnd },
+                        { type: "text", value: String(id) }
+                    ]
+                }]);
+            } else {
+                await tursoQuery([{
+                    sql: "INSERT INTO wi_plan (code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    args: [
+                        { type: "text", value: code },
+                        { type: "text", value: title },
+                        { type: "text", value: owner },
+                        { type: "text", value: turn },
+                        { type: "text", value: priority },
+                        { type: "text", value: activePhase },
+                        { type: "text", value: p1 },
+                        { type: "text", value: p2 },
+                        { type: "text", value: p3 },
+                        { type: "text", value: status },
+                        { type: "text", value: weekStart },
+                        { type: "text", value: weekEnd }
+                    ]
+                }]);
+            }
+
+            closeWiModal();
+            await loadWiPlan();
+        } catch (err) {
+            alert("Error al guardar WI en Turso: " + err.message);
+        }
+    }
+
+    async function deleteWiItem(id) {
+        if(!confirm("¿Desea eliminar esta instrucción de trabajo de Turso?")) return;
+        try {
+            await tursoQuery([{
+                sql: "DELETE FROM wi_plan WHERE id = ?",
+                args: [{ type: "text", value: String(id) }]
+            }]);
+            await loadWiPlan();
+        } catch (err) {
+            alert("Error al eliminar la WI.");
+        }
+    }
+
+    /* CARGA Y PERSISTENCIA DE TEAM WORKLOAD DESDE TURSO */
+    async function loadWorkload() {
+        try {
+            const res = await tursoQuery(["SELECT owner, completed, progress, pending, overdue FROM team_workload ORDER BY owner ASC"]);
+            const rows = res[0]?.response?.result?.rows || [];
+
+            if (rows.length === 0) {
+                // Insertar datos reales iniciales
+                const seedQueries = [
+                    { sql: "INSERT INTO team_workload (owner, completed, progress, pending, overdue) VALUES ('Daniel Martinez', 2, 1, 1, 0)", args: [] },
+                    { sql: "INSERT INTO team_workload (owner, completed, progress, pending, overdue) VALUES ('Eduardo Simental', 1, 2, 1, 0)", args: [] },
+                    { sql: "INSERT INTO team_workload (owner, completed, progress, pending, overdue) VALUES ('Ervey Ceballos', 1, 2, 0, 0)", args: [] },
+                    { sql: "INSERT INTO team_workload (owner, completed, progress, pending, overdue) VALUES ('Jennifer Sanchez', 0, 0, 1, 0)", args: [] },
+                    { sql: "INSERT INTO team_workload (owner, completed, progress, pending, overdue) VALUES ('Manuel Acosta', 0, 1, 0, 0)", args: [] },
+                    { sql: "INSERT INTO team_workload (owner, completed, progress, pending, overdue) VALUES ('Alejandro Guerrero', 1, 0, 0, 0)", args: [] }
+                ];
+                await tursoQuery(seedQueries);
+                return loadWorkload();
+            }
+
+            customWorkloadMap = {};
+            rows.forEach(r => {
+                customWorkloadMap[r[0].value] = {
+                    completed: Number(r[1]?.value || 0),
+                    progress: Number(r[2]?.value || 0),
+                    pending: Number(r[3]?.value || 0),
+                    overdue: Number(r[4]?.value || 0)
+                };
+            });
+
+            renderTeamWorkload();
+        } catch(e) {
+            console.error("Error al cargar Carga de Trabajo de Turso:", e);
+        }
+    }
+
+    async function saveWorkloadItem(e) {
+        e.preventDefault();
+        const originalKey = document.getElementById('workload-owner-key').value;
+        const newName = document.getElementById('workload-owner-name').value.trim();
+        const completed = String(document.getElementById('workload-completed').value || "0");
+        const progress = String(document.getElementById('workload-progress').value || "0");
+        const pending = String(document.getElementById('workload-pending').value || "0");
+        const overdue = String(document.getElementById('workload-overdue').value || "0");
+
+        if (!newName) return;
+
+        try {
+            if (originalKey && originalKey !== newName) {
+                await tursoQuery([{
+                    sql: "DELETE FROM team_workload WHERE owner = ?",
+                    args: [{ type: "text", value: originalKey }]
+                }]);
+            }
+
+            await tursoQuery([{
+                sql: "INSERT INTO team_workload (owner, completed, progress, pending, overdue) VALUES (?, ?, ?, ?, ?) ON CONFLICT(owner) DO UPDATE SET completed=excluded.completed, progress=excluded.progress, pending=excluded.pending, overdue=excluded.overdue",
+                args: [
+                    { type: "text", value: newName },
+                    { type: "text", value: completed },
+                    { type: "text", value: progress },
+                    { type: "text", value: pending },
+                    { type: "text", value: overdue }
+                ]
+            }]);
+
+            closeWorkloadModal();
+            await loadWorkload();
+        } catch(err) {
+            alert("Error guardando carga en Turso: " + err.message);
+        }
+    }
+
+    async function deleteWorkloadItem(owner) {
+        if(!confirm(`¿Desea eliminar a ${owner} del resumen en Turso?`)) return;
+        try {
+            await tursoQuery([{
+                sql: "DELETE FROM team_workload WHERE owner = ?",
+                args: [{ type: "text", value: owner }]
+            }]);
+            await loadWorkload();
+        } catch(e) {
+            alert("Error al eliminar del resumen de carga.");
+        }
+    }
+
+    /* RENDER DE MATRIZ Y RESUMEN DE CARGA */
+    function renderWiPlan() {
+        const tbody = document.getElementById('wi-table-body');
+        if(!tbody) return;
+        tbody.innerHTML = '';
+
+        let total = wiPlanList.length;
+        let completedCount = 0;
+        let inProgressCount = 0;
+        let pendingCount = 0;
+        let overdueCount = 0;
+
+        let p1Completed = 0;
+        let p2Completed = 0;
+        let p3Completed = 0;
+
+        wiPlanList.forEach(item => {
+            let phasesDone = 0;
+            if (item.p1 === 'Completed') { phasesDone++; p1Completed++; }
+            if (item.p2 === 'Completed') { phasesDone++; p2Completed++; }
+            if (item.p3 === 'Completed') { phasesDone++; p3Completed++; }
+
+            let percent = Math.round((phasesDone / 3) * 100);
+
+            if (item.status === 'Completed') completedCount++;
+            else if (item.status === 'In Progress') inProgressCount++;
+            else if (item.status === 'Overdue') overdueCount++;
+            else pendingCount++;
+
+            let phaseColorClass = 'bg-blue-600/80 text-white border-blue-400/50 shadow-sm';
+            let phaseLabel = item.activePhase || 'P1';
+
+            if (phaseLabel === 'P3') {
+                phaseColorClass = 'bg-purple-600/80 text-white border-purple-400/50 shadow-sm';
+            } else if (phaseLabel === 'P2') {
+                phaseColorClass = 'bg-emerald-600/80 text-white border-emerald-400/50 shadow-sm';
+            } else {
+                phaseColorClass = 'bg-blue-600/80 text-white border-blue-400/50 shadow-sm';
+            }
+
+            let weekCells = '';
+            const startW = item.weekStart || 1;
+            const endW = item.weekEnd || startW;
+
+            for (let w = 1; w <= 8; w++) {
+                if (w >= startW && w <= endW) {
+                    let isStartCell = (w === startW);
+                    let isEndCell = (w === endW);
+                    let roundedCorners = '';
+
+                    if (isStartCell && isEndCell) roundedCorners = 'rounded-md';
+                    else if (isStartCell) roundedCorners = 'rounded-l-md';
+                    else if (isEndCell) roundedCorners = 'rounded-r-md';
+
+                    weekCells += `
+                        <td class="p-0.5 border-r border-slate-800 text-center">
+                            <div class="${phaseColorClass} ${roundedCorners} h-6 flex items-center justify-center font-bold text-[9px] font-mono border">
+                                ${isStartCell ? phaseLabel : '•'}
+                            </div>
+                        </td>`;
+                } else {
+                    weekCells += `<td class="p-1 border-r border-slate-800 text-center text-slate-800">•</td>`;
+                }
+            }
+
+            tbody.innerHTML += `
+                <tr class="hover:bg-slate-800/40 border-b border-slate-800/60 text-slate-200">
+                    <td class="p-2.5 border-r border-slate-800 font-mono font-bold text-blue-400">${item.code}</td>
+                    <td class="p-2.5 border-r border-slate-800 font-bold">${item.title}</td>
+                    <td class="p-2.5 border-r border-slate-800 text-slate-300">${item.owner}</td>
+                    <td class="p-2.5 border-r border-slate-800 text-center font-bold text-amber-400">${item.turn}</td>
+                    <td class="p-2.5 border-r border-slate-800 text-center">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${getPriorityBadgeClass(item.priority)}">
+                            ${item.priority}
+                        </span>
+                    </td>
+                    <td class="p-2.5 border-r border-slate-800 text-center">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold border ${getPhaseBadgeClass(phaseLabel)}">
+                            ${phaseLabel}
+                        </span>
+                    </td>
+                    <td class="p-2.5 border-r border-slate-800 text-center">
+                        <span class="text-[10px] font-bold ${item.p1 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p1}</span>
+                    </td>
+                    <td class="p-2.5 border-r border-slate-800 text-center">
+                        <span class="text-[10px] font-bold ${item.p2 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p2}</span>
+                    </td>
+                    <td class="p-2.5 border-r border-slate-800 text-center">
+                        <span class="text-[10px] font-bold ${item.p3 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p3}</span>
+                    </td>
+                    <td class="p-2.5 border-r border-slate-800 text-center">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${getStatusBadgeClass(item.status)}">
+                            ${item.status}
+                        </span>
+                    </td>
+                    <td class="p-2.5 border-r border-slate-800 text-center font-mono font-bold text-indigo-300">${percent}%</td>
+                    ${weekCells}
+                    <td class="p-2.5 text-right space-x-2">
+                        <button onclick="editWiItem(${item.id})" class="text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteWiItem(${item.id})" class="text-rose-400 hover:text-rose-300 transition"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById('wi-total-count').innerText = total;
+        document.getElementById('wi-completed-count').innerText = completedCount;
+        document.getElementById('wi-progress-count').innerText = inProgressCount;
+        document.getElementById('wi-pending-count').innerText = pendingCount;
+        document.getElementById('wi-overdue-count').innerText = overdueCount;
+
+        let p1Pct = total ? Math.round((p1Completed / total) * 100) : 0;
+        let p2Pct = total ? Math.round((p2Completed / total) * 100) : 0;
+        let p3Pct = total ? Math.round((p3Completed / total) * 100) : 0;
+
+        document.getElementById('phase1-percent').innerText = `${p1Pct}%`;
+        document.getElementById('phase2-percent').innerText = `${p2Pct}%`;
+        document.getElementById('phase3-percent').innerText = `${p3Pct}%`;
+
+        let overallPct = Math.round((p1Pct + p2Pct + p3Pct) / 3);
+        document.getElementById('wi-overall-percent').innerText = `${overallPct}%`;
+
+        renderWiOverallChart(overallPct);
+        renderTeamWorkload();
+    }
+
+    function renderTeamWorkload() {
+        const tbody = document.getElementById('wi-workload-body');
+        if(!tbody) return;
+        tbody.innerHTML = '';
+
+        Object.keys(customWorkloadMap).forEach(owner => {
+            const data = customWorkloadMap[owner];
+            const total = (data.completed || 0) + (data.progress || 0) + (data.pending || 0) + (data.overdue || 0);
+            const pct = total ? Math.round(((data.completed || 0) / total) * 100) : 0;
+
+            tbody.innerHTML += `
+                <tr class="hover:bg-slate-800/30 border-b border-slate-800/60">
+                    <td class="p-2.5 font-bold text-slate-200"><i class="fa-solid fa-circle text-[6px] text-blue-400 mr-2"></i>${owner}</td>
+                    <td class="p-2.5 text-center font-mono font-bold text-white">${total}</td>
+                    <td class="p-2.5 text-center font-mono text-emerald-400 font-bold">${data.completed || 0}</td>
+                    <td class="p-2.5 text-center font-mono text-amber-400 font-bold">${data.progress || 0}</td>
+                    <td class="p-2.5 text-center font-mono text-slate-400 font-bold">${data.pending || 0}</td>
+                    <td class="p-2.5 text-center font-mono text-rose-400 font-bold">${data.overdue || 0}</td>
+                    <td class="p-2.5 text-center font-mono font-bold text-indigo-400">${pct}%</td>
+                    <td class="p-2.5 text-right space-x-2">
+                        <button onclick="editWorkloadItem('${owner}')" class="text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteWorkloadItem('${owner}')" class="text-rose-400 hover:text-rose-300 transition"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    /* SESIÓN Y ACCIONES DE NAVEGACIÓN */
+    function checkSavedSession() {
+        const savedSession = JSON.parse(localStorage.getItem('tracker_session'));
+        if (savedSession && savedSession.isLoggedIn) {
+            const roleSelector = document.getElementById('role-selector');
+            if (roleSelector) roleSelector.value = savedSession.role;
+            toggleRole(savedSession.role);
+            document.getElementById('login-screen').classList.add('hidden');
+        }
+    }
+
+    function handleLogin(e) {
+        e.preventDefault();
+        const user = document.getElementById('login-username').value.trim();
+        const pass = document.getElementById('login-password').value.trim();
+        const errDiv = document.getElementById('login-error');
+
+        if (user && pass) {
+            let role = 'user';
+            const roleSelector = document.getElementById('role-selector');
+            
+            if (user.toLowerCase().includes('daniel') || user.toLowerCase().includes('admin')) {
+                role = 'admin';
+            }
+
+            if (roleSelector) roleSelector.value = role;
+            toggleRole(role);
+
+            localStorage.setItem('tracker_session', JSON.stringify({
+                isLoggedIn: true,
+                username: user,
+                role: role
+            }));
+
+            errDiv.classList.add('hidden');
+            document.getElementById('login-screen').classList.add('hidden');
+        } else {
+            errDiv.classList.remove('hidden');
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('tracker_session');
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        document.getElementById('login-error').classList.add('hidden');
+        document.getElementById('login-screen').classList.remove('hidden');
+    }
+
+    function toggleFullScreenMenu() {
+        const menu = document.getElementById('fullscreen-menu');
+        menu.classList.toggle('hidden');
+        menu.classList.toggle('flex');
     }
 
     function toggleRole(role) {
@@ -972,8 +1273,7 @@
     async function loadUsers() {
         try {
             const res = await tursoQuery(["SELECT id, username FROM users ORDER BY username ASC"]);
-            const resultObj = res[0]?.response?.result;
-            const rows = resultObj?.rows || [];
+            const rows = res[0]?.response?.result?.rows || [];
             
             globalUsers = rows.map(r => ({ 
                 id: Number(r[0].value), 
@@ -995,7 +1295,7 @@
 
             renderUsersTable();
         } catch(e) {
-            console.error("Error al cargar usuarios de Turso:", e);
+            console.error("Error al cargar usuarios:", e);
         }
     }
 
@@ -1070,8 +1370,7 @@
     async function loadTasks() {
         try {
             const res = await tursoQuery(["SELECT id, title, assigned_to, start_date, end_date, progress, status, priority FROM activities ORDER BY id DESC"]);
-            const resultObj = res[0]?.response?.result;
-            const rows = resultObj?.rows || [];
+            const rows = res[0]?.response?.result?.rows || [];
 
             globalTasks = rows.map(r => ({
                 id: Number(r[0].value),
@@ -1086,7 +1385,7 @@
 
             filterTasks();
         } catch(e) {
-            console.error("Error al cargar actividades de Turso:", e);
+            console.error("Error al cargar actividades:", e);
         }
     }
 
@@ -1114,6 +1413,22 @@
             case 'Alta': case 'High': return 'bg-rose-950/80 border-rose-700 text-rose-300';
             case 'Media': case 'Medium': return 'bg-amber-950/80 border-amber-700 text-amber-300';
             case 'Baja': case 'Low': default: return 'bg-slate-800 border-slate-700 text-slate-400';
+        }
+    }
+
+    function getStatusBadgeClass(status) {
+        switch(status) {
+            case 'Completado': case 'Completed': case 'Finalizada': return 'bg-emerald-950/60 border-emerald-800/80 text-emerald-400';
+            case 'En Proceso': case 'In Progress': return 'bg-amber-950/60 border-amber-800/80 text-amber-400';
+            case 'Pendiente': case 'Pending': default: return 'bg-rose-950/60 border-rose-800/80 text-rose-400';
+        }
+    }
+
+    function getPhaseBadgeClass(phase) {
+        switch(phase) {
+            case 'P3': return 'bg-purple-950/80 border-purple-700 text-purple-300';
+            case 'P2': return 'bg-emerald-950/80 border-emerald-700 text-emerald-300';
+            case 'P1': default: return 'bg-blue-950/80 border-blue-700 text-blue-300';
         }
     }
 
@@ -1154,8 +1469,8 @@
                         </span>
                     </td>
                     <td class="p-3.5 text-center">
-                        <button onclick="openDetailsModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1 rounded-lg transition text-[11px] flex items-center gap-1.5 mx-auto">
-                            <i class="fa-solid fa-folder-open text-amber-400"></i> Ver / Anexar
+                        <button class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1 rounded-lg transition text-[11px] flex items-center gap-1.5 mx-auto">
+                            <i class="fa-solid fa-folder-open text-amber-400"></i> Ver
                         </button>
                     </td>
                     <td class="p-3.5 text-right space-x-2">
@@ -1165,14 +1480,6 @@
                 </tr>
             `;
         });
-    }
-
-    function getStatusBadgeClass(status) {
-        switch(status) {
-            case 'Completado': case 'Completed': case 'Finalizada': return 'bg-emerald-950/60 border-emerald-800/80 text-emerald-400';
-            case 'En Proceso': case 'In Progress': return 'bg-amber-950/60 border-amber-800/80 text-amber-400';
-            case 'Pendiente': case 'Pending': default: return 'bg-rose-950/60 border-rose-800/80 text-rose-400';
-        }
     }
 
     function renderGantt(tasksList) {
@@ -1412,140 +1719,6 @@
         });
     }
 
-    /* LÓGICA RENDER WI PLAN MASTER CON PERSISTENCIA */
-    function renderWiPlan() {
-        const tbody = document.getElementById('wi-table-body');
-        if(!tbody) return;
-        tbody.innerHTML = '';
-
-        let total = wiPlanList.length;
-        let completedCount = 0;
-        let inProgressCount = 0;
-        let pendingCount = 0;
-        let overdueCount = 0;
-
-        let p1Completed = 0;
-        let p2Completed = 0;
-        let p3Completed = 0;
-
-        wiPlanList.forEach(item => {
-            let phasesDone = 0;
-            if (item.p1 === 'Completed') { phasesDone++; p1Completed++; }
-            if (item.p2 === 'Completed') { phasesDone++; p2Completed++; }
-            if (item.p3 === 'Completed') { phasesDone++; p3Completed++; }
-
-            let percent = Math.round((phasesDone / 3) * 100);
-
-            if (item.status === 'Completed') completedCount++;
-            else if (item.status === 'In Progress') inProgressCount++;
-            else if (item.status === 'Overdue') overdueCount++;
-            else pendingCount++;
-
-            let phaseColorClass = 'bg-blue-600/80 text-white border-blue-400/50 shadow-sm';
-            let phaseLabel = item.activePhase || 'P1';
-
-            if (phaseLabel === 'P3') {
-                phaseColorClass = 'bg-purple-600/80 text-white border-purple-400/50 shadow-sm';
-            } else if (phaseLabel === 'P2') {
-                phaseColorClass = 'bg-emerald-600/80 text-white border-emerald-400/50 shadow-sm';
-            } else {
-                phaseColorClass = 'bg-blue-600/80 text-white border-blue-400/50 shadow-sm';
-            }
-
-            let weekCells = '';
-            const startW = item.weekStart || 1;
-            const endW = item.weekEnd || startW;
-
-            for (let w = 1; w <= 8; w++) {
-                if (w >= startW && w <= endW) {
-                    let isStartCell = (w === startW);
-                    let isEndCell = (w === endW);
-                    let roundedCorners = '';
-
-                    if (isStartCell && isEndCell) roundedCorners = 'rounded-md';
-                    else if (isStartCell) roundedCorners = 'rounded-l-md';
-                    else if (isEndCell) roundedCorners = 'rounded-r-md';
-
-                    weekCells += `
-                        <td class="p-0.5 border-r border-slate-800 text-center">
-                            <div class="${phaseColorClass} ${roundedCorners} h-6 flex items-center justify-center font-bold text-[9px] font-mono border">
-                                ${isStartCell ? phaseLabel : '•'}
-                            </div>
-                        </td>`;
-                } else {
-                    weekCells += `<td class="p-1 border-r border-slate-800 text-center text-slate-800">•</td>`;
-                }
-            }
-
-            tbody.innerHTML += `
-                <tr class="hover:bg-slate-800/40 border-b border-slate-800/60 text-slate-200">
-                    <td class="p-2.5 border-r border-slate-800 font-mono font-bold text-blue-400">${item.code}</td>
-                    <td class="p-2.5 border-r border-slate-800 font-bold">${item.title}</td>
-                    <td class="p-2.5 border-r border-slate-800 text-slate-300">${item.owner}</td>
-                    <td class="p-2.5 border-r border-slate-800 text-center font-bold text-amber-400">${item.turn}</td>
-                    <td class="p-2.5 border-r border-slate-800 text-center">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${getPriorityBadgeClass(item.priority)}">
-                            ${item.priority}
-                        </span>
-                    </td>
-                    <td class="p-2.5 border-r border-slate-800 text-center">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold border ${getPhaseBadgeClass(phaseLabel)}">
-                            ${phaseLabel}
-                        </span>
-                    </td>
-                    <td class="p-2.5 border-r border-slate-800 text-center">
-                        <span class="text-[10px] font-bold ${item.p1 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p1}</span>
-                    </td>
-                    <td class="p-2.5 border-r border-slate-800 text-center">
-                        <span class="text-[10px] font-bold ${item.p2 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p2}</span>
-                    </td>
-                    <td class="p-2.5 border-r border-slate-800 text-center">
-                        <span class="text-[10px] font-bold ${item.p3 === 'Completed' ? 'text-emerald-400' : 'text-slate-500'}">${item.p3}</span>
-                    </td>
-                    <td class="p-2.5 border-r border-slate-800 text-center">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${getStatusBadgeClass(item.status)}">
-                            ${item.status}
-                        </span>
-                    </td>
-                    <td class="p-2.5 border-r border-slate-800 text-center font-mono font-bold text-indigo-300">${percent}%</td>
-                    ${weekCells}
-                    <td class="p-2.5 text-right space-x-2">
-                        <button onclick="editWiItem(${item.id})" class="text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteWiItem(${item.id})" class="text-rose-400 hover:text-rose-300 transition"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-            `;
-        });
-
-        document.getElementById('wi-total-count').innerText = total;
-        document.getElementById('wi-completed-count').innerText = completedCount;
-        document.getElementById('wi-progress-count').innerText = inProgressCount;
-        document.getElementById('wi-pending-count').innerText = pendingCount;
-        document.getElementById('wi-overdue-count').innerText = overdueCount;
-
-        let p1Pct = total ? Math.round((p1Completed / total) * 100) : 0;
-        let p2Pct = total ? Math.round((p2Completed / total) * 100) : 0;
-        let p3Pct = total ? Math.round((p3Completed / total) * 100) : 0;
-
-        document.getElementById('phase1-percent').innerText = `${p1Pct}%`;
-        document.getElementById('phase2-percent').innerText = `${p2Pct}%`;
-        document.getElementById('phase3-percent').innerText = `${p3Pct}%`;
-
-        let overallPct = Math.round((p1Pct + p2Pct + p3Pct) / 3);
-        document.getElementById('wi-overall-percent').innerText = `${overallPct}%`;
-
-        renderWiOverallChart(overallPct);
-        renderTeamWorkload();
-    }
-
-    function getPhaseBadgeClass(phase) {
-        switch(phase) {
-            case 'P3': return 'bg-purple-950/80 border-purple-700 text-purple-300';
-            case 'P2': return 'bg-emerald-950/80 border-emerald-700 text-emerald-300';
-            case 'P1': default: return 'bg-blue-950/80 border-blue-700 text-blue-300';
-        }
-    }
-
     function renderWiOverallChart(percent) {
         const ctx = document.getElementById('wiOverallChart').getContext('2d');
         if (wiOverallChartInstance) wiOverallChartInstance.destroy();
@@ -1565,34 +1738,6 @@
                 cutout: '75%',
                 plugins: { legend: { display: false }, tooltip: { enabled: false } }
             }
-        });
-    }
-
-    function renderTeamWorkload() {
-        const tbody = document.getElementById('wi-workload-body');
-        if(!tbody) return;
-        tbody.innerHTML = '';
-
-        Object.keys(customWorkloadMap).forEach(owner => {
-            const data = customWorkloadMap[owner];
-            const total = (data.completed || 0) + (data.progress || 0) + (data.pending || 0) + (data.overdue || 0);
-            const pct = total ? Math.round(((data.completed || 0) / total) * 100) : 0;
-
-            tbody.innerHTML += `
-                <tr class="hover:bg-slate-800/30 border-b border-slate-800/60">
-                    <td class="p-2.5 font-bold text-slate-200"><i class="fa-solid fa-circle text-[6px] text-blue-400 mr-2"></i>${owner}</td>
-                    <td class="p-2.5 text-center font-mono font-bold text-white">${total}</td>
-                    <td class="p-2.5 text-center font-mono text-emerald-400 font-bold">${data.completed || 0}</td>
-                    <td class="p-2.5 text-center font-mono text-amber-400 font-bold">${data.progress || 0}</td>
-                    <td class="p-2.5 text-center font-mono text-slate-400 font-bold">${data.pending || 0}</td>
-                    <td class="p-2.5 text-center font-mono text-rose-400 font-bold">${data.overdue || 0}</td>
-                    <td class="p-2.5 text-center font-mono font-bold text-indigo-400">${pct}%</td>
-                    <td class="p-2.5 text-right space-x-2">
-                        <button onclick="editWorkloadItem('${owner}')" class="text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteWorkloadItem('${owner}')" class="text-rose-400 hover:text-rose-300 transition"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-            `;
         });
     }
 
@@ -1624,38 +1769,8 @@
         document.getElementById('workload-modal').classList.remove('flex');
     }
 
-    function saveWorkloadItem(e) {
-        e.preventDefault();
-        const originalKey = document.getElementById('workload-owner-key').value;
-        const newName = document.getElementById('workload-owner-name').value.trim();
-        const completed = parseInt(document.getElementById('workload-completed').value) || 0;
-        const progress = parseInt(document.getElementById('workload-progress').value) || 0;
-        const pending = parseInt(document.getElementById('workload-pending').value) || 0;
-        const overdue = parseInt(document.getElementById('workload-overdue').value) || 0;
-
-        if (!newName) return;
-
-        if (originalKey && originalKey !== newName) {
-            delete customWorkloadMap[originalKey];
-        }
-
-        customWorkloadMap[newName] = { completed, progress, pending, overdue };
-        
-        // Guardar cambios en LocalStorage
-        saveWorkloadToStorage();
-        closeWorkloadModal();
-        renderTeamWorkload();
-    }
-
     function editWorkloadItem(owner) {
         openWorkloadModal(owner);
-    }
-
-    function deleteWorkloadItem(owner) {
-        if(!confirm(`¿Desea eliminar a ${owner} del resumen de carga?`)) return;
-        delete customWorkloadMap[owner];
-        saveWorkloadToStorage();
-        renderTeamWorkload();
     }
 
     function openWiModal() {
@@ -1669,38 +1784,6 @@
     function closeWiModal() {
         document.getElementById('wi-modal').classList.add('hidden');
         document.getElementById('wi-modal').classList.remove('flex');
-    }
-
-    function saveWiItem(e) {
-        e.preventDefault();
-        const id = document.getElementById('wi-id').value;
-        const code = document.getElementById('wi-code').value.trim();
-        const title = document.getElementById('wi-title').value.trim();
-        const owner = document.getElementById('wi-owner').value.trim();
-        const turn = document.getElementById('wi-turn').value;
-        const priority = document.getElementById('wi-priority').value;
-        const activePhase = document.getElementById('wi-active-phase').value;
-        const p1 = document.getElementById('wi-p1').value;
-        const p2 = document.getElementById('wi-p2').value;
-        const p3 = document.getElementById('wi-p3').value;
-        const status = document.getElementById('wi-status').value;
-        const weekStart = parseInt(document.getElementById('wi-week-start').value) || 1;
-        const weekEnd = parseInt(document.getElementById('wi-week-end').value) || weekStart;
-
-        if (id) {
-            const index = wiPlanList.findIndex(item => item.id == id);
-            if (index !== -1) {
-                wiPlanList[index] = { id: Number(id), code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd };
-            }
-        } else {
-            const newId = wiPlanList.length ? Math.max(...wiPlanList.map(i => i.id)) + 1 : 1;
-            wiPlanList.push({ id: newId, code, title, owner, turn, priority, activePhase, p1, p2, p3, status, weekStart, weekEnd });
-        }
-
-        // Guardar cambios en LocalStorage
-        saveWiPlanToStorage();
-        closeWiModal();
-        renderWiPlan();
     }
 
     function editWiItem(id) {
@@ -1722,13 +1805,6 @@
         document.getElementById('wi-status').value = item.status;
         document.getElementById('wi-week-start').value = item.weekStart || 1;
         document.getElementById('wi-week-end').value = item.weekEnd || 1;
-    }
-
-    function deleteWiItem(id) {
-        if(!confirm("¿Desea eliminar esta instrucción de trabajo?")) return;
-        wiPlanList = wiPlanList.filter(item => item.id !== id);
-        saveWiPlanToStorage();
-        renderWiPlan();
     }
 
     function switchTab(tab) {
@@ -1757,7 +1833,8 @@
         } else if (tab === 'wi-plan') {
             if(btnWi) btnWi.className = activeClass;
             if(viewWi) viewWi.classList.remove('hidden');
-            renderWiPlan();
+            loadWiPlan();
+            loadWorkload();
         } else {
             btnUsers.className = activeClass;
             viewUsers.classList.remove('hidden');
@@ -1802,155 +1879,6 @@
         document.getElementById('task-progress').value = task.progress;
         document.getElementById('task-status').value = task.status;
         document.getElementById('task-priority').value = task.priority || "Media";
-    }
-
-    /* DETALLES DE ACTIVIDADES, COMENTARIOS Y ADJUNTOS */
-    async function openDetailsModal(activityId) {
-        const task = globalTasks.find(t => t.id === activityId);
-        if (!task) return;
-
-        document.getElementById('current-details-activity-id').value = activityId;
-        document.getElementById('details-title').innerText = `#${task.id} - ${task.title}`;
-        document.getElementById('details-subtitle').innerText = `Asignado a: ${task.assigned_to}`;
-
-        document.getElementById('details-modal').classList.remove('hidden');
-        document.getElementById('details-modal').classList.add('flex');
-
-        switchDetailsTab('comments');
-        await loadActivityComments(activityId);
-        await loadActivityFiles(activityId);
-    }
-
-    function closeDetailsModal() {
-        document.getElementById('details-modal').classList.add('hidden');
-        document.getElementById('details-modal').classList.remove('flex');
-    }
-
-    function switchDetailsTab(tab) {
-        const btnComments = document.getElementById('tab-btn-comments');
-        const btnFiles = document.getElementById('tab-btn-files');
-        const contentComments = document.getElementById('tab-content-comments');
-        const contentFiles = document.getElementById('tab-content-files');
-
-        if (tab === 'comments') {
-            btnComments.className = 'pb-2 text-xs font-bold border-b-2 border-blue-500 text-blue-400 flex items-center gap-2';
-            btnFiles.className = 'pb-2 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2';
-            contentComments.classList.remove('hidden');
-            contentFiles.classList.add('hidden');
-        } else {
-            btnFiles.className = 'pb-2 text-xs font-bold border-b-2 border-blue-500 text-blue-400 flex items-center gap-2';
-            btnComments.className = 'pb-2 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2';
-            contentFiles.classList.remove('hidden');
-            contentComments.classList.add('hidden');
-        }
-    }
-
-    async function loadActivityComments(activityId) {
-        const container = document.getElementById('comments-list');
-        container.innerHTML = `<p class="text-xs text-slate-500">Cargando comentarios...</p>`;
-
-        try {
-            const res = await tursoQuery([{
-                sql: "SELECT id, author, text, created_at FROM comments WHERE activity_id = ? ORDER BY id ASC",
-                args: [{ type: "text", value: String(activityId) }]
-            }]);
-
-            const rows = res[0]?.response?.result?.rows || [];
-            document.getElementById('comments-count').innerText = rows.length;
-
-            if (rows.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 italic py-4 text-center">No hay comentarios aun.</p>`;
-                return;
-            }
-
-            container.innerHTML = '';
-            rows.forEach(r => {
-                const author = r[1]?.value || 'Daniel';
-                const text = r[2]?.value || '';
-                const date = r[3]?.value || '';
-
-                container.innerHTML += `
-                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 space-y-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-indigo-400"><i class="fa-solid fa-user-circle"></i> ${author}</span>
-                            <span class="text-[10px] text-slate-500 font-mono">${date}</span>
-                        </div>
-                        <p class="text-xs text-slate-300 whitespace-pre-wrap">${text}</p>
-                    </div>
-                `;
-            });
-            container.scrollTop = container.scrollHeight;
-        } catch (err) {
-            container.innerHTML = `<p class="text-xs text-rose-400">Error al cargar comentarios.</p>`;
-        }
-    }
-
-    async function addComment() {
-        const activityId = document.getElementById('current-details-activity-id').value;
-        const input = document.getElementById('new-comment-input');
-        const text = input.value.trim();
-
-        if (!text || !activityId) return;
-
-        const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
-
-        try {
-            await tursoQuery([{
-                sql: "INSERT INTO comments (activity_id, author, text, created_at) VALUES (?, ?, ?, ?)",
-                args: [
-                    { type: "text", value: String(activityId) },
-                    { type: "text", value: "Daniel" },
-                    { type: "text", value: String(text) },
-                    { type: "text", value: String(now) }
-                ]
-            }]);
-
-            input.value = '';
-            await loadActivityComments(activityId);
-        } catch (err) {
-            alert("Error al publicar comentario: " + err.message);
-        }
-    }
-
-    async function loadActivityFiles(activityId) {
-        const container = document.getElementById('files-list');
-        container.innerHTML = `<p class="text-xs text-slate-500">Cargando archivos...</p>`;
-
-        try {
-            const res = await tursoQuery([{
-                sql: "SELECT id, file_name, file_data FROM attachments WHERE activity_id = ? ORDER BY id DESC",
-                args: [{ type: "text", value: String(activityId) }]
-            }]);
-
-            const rows = res[0]?.response?.result?.rows || [];
-            document.getElementById('files-count').innerText = rows.length;
-
-            if (rows.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 italic py-4 text-center">No hay archivos adjuntos.</p>`;
-                return;
-            }
-
-            container.innerHTML = '';
-            rows.forEach(r => {
-                const id = r[0]?.value;
-                const name = r[1]?.value || 'Archivo sin nombre';
-                const base64Data = r[2]?.value || '';
-
-                container.innerHTML += `
-                    <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 truncate">
-                            <i class="fa-solid fa-file-lines text-blue-400 text-sm"></i>
-                            <span class="text-xs font-semibold text-slate-200 truncate">${name}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <a href="${base64Data}" download="${name}" class="text-xs font-bold text-blue-400 hover:text-blue-300 bg-slate-900 border border-slate-800 px-2 py-1 rounded">Descargar</a>
-                        </div>
-                    </div>
-                `;
-            });
-        } catch (err) {
-            container.innerHTML = `<p class="text-xs text-rose-400">Error al cargar archivos.</p>`;
-        }
     }
     </script>
 </body>
